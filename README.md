@@ -1,4 +1,4 @@
-# L7-Gallery
+# L7Gallery
 
 ## Getting Started
 

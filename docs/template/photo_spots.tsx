@@ -27,7 +27,7 @@ export default () => {
   const layerOptions = {
     autoFit: true,
     shape: 'circle',
-    size: 2,
+    size: 4,
     blend: 'additive',
     color: {
       field: 'value',

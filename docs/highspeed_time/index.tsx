@@ -31,14 +31,33 @@ export default () => {
       mapOptions={{ style: 'dark', zoom: 4, center: [113.477391, 34.626256] }}
     >
       <LineLayer
-        size={2}
-        color={'white'}
-        animate={{
-          enable: true,
-          interval: Math.random(),
-          duration: 7.8,
-          trailLength: 2,
+        size={{
+          field: 'time',
+          value: (val: Record<string, any>) => {
+            if (val.time === '') {
+              return 18;
+            }
+            return +val.time.slice(0, 1) < 2 ? 6 : +val.time.slice(0, 1) + 4;
+          },
         }}
+        style={
+          {
+            opacity: [
+              'time',
+              (e: string) => {
+                return +e.slice(0, 1) / 10 < 0.2 ? 0.2 : +e.slice(0, 1) / 10;
+              },
+            ],
+            sourceColor: 'orange',
+            targetColor: 'red',
+            arrow: {
+              enable: true,
+              arrowWidth: 0.9,
+              arrowHeight: 0.9,
+              tailWidth: 10,
+            },
+          } as any
+        }
         source={{ data: parserData(), parser: { type: 'geojson' } }}
       />
 
@@ -51,10 +70,26 @@ export default () => {
           data: pointData,
           parser: { type: 'json', x: 'longitude_to', y: 'latitude_to' },
         }}
+        fillColor={'rgb(251,0,8)'}
+        strokeColor={'white'}
+        opacity={0.8}
         radius={{
-          field: 'name',
-          value: (val: Record<string, any>) => (val.name === '郑州' ? 15 : 8),
+          field: 'time',
+          value: (val: Record<string, any>) => {
+            if (val.time === '') {
+              return 18;
+            }
+            return +val.time.slice(0, 1) < 2 ? 6 : +val.time.slice(0, 1) + 6;
+          },
         }}
+      />
+      <BubbleLayer
+        source={{
+          data: pointData,
+          parser: { type: 'json', x: 'longitude_to', y: 'latitude_to' },
+        }}
+        fillColor={'white'}
+        radius={2}
       />
     </LarkMap>
   );

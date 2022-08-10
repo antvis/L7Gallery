@@ -18,18 +18,19 @@ export default () => {
 
   const fetchPointData = async () => {
     const res = await fetch(
-      'https://gw.alipayobjects.com/os/bmw-prod/bf2ad5f5-c4f5-4b62-a2fb-6ee993012d9a.json',
+      'https://gw.alipayobjects.com/os/bmw-prod/16cd4004-b21c-455e-a2e4-c396a5ecebe1.json',
     );
     const result = await res.json();
     setPointData({ ...pointData, data: result });
   };
+
   const layerOptions = {
     autoFit: true,
     shape: 'circle',
     size: 2,
     blend: 'additive',
     color: {
-      field: 'lat',
+      field: 'value',
       value: [
         '#0A3663',
         '#1558AC',

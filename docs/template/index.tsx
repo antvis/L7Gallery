@@ -1,4 +1,4 @@
-import { LarkMap } from '@antv/larkmap';
+import { LarkMap, LarkMapProps } from '@antv/larkmap';
 import React from 'react';
 
 const config = {
@@ -12,7 +12,7 @@ const config = {
 };
 
 export default () => (
-  <LarkMap {...config} style={{ height: '500px' }}>
+  <LarkMap {...(config as LarkMapProps)} style={{ height: '500px' }}>
     <h2 style={{ position: 'absolute', left: '10px' }}>LarkMap</h2>
   </LarkMap>
 );

@@ -1,45 +1,13 @@
-import { PointLayer, LarkMap } from '@antv/larkmap';
+import { PointLayer, LarkMap, Popup } from '@antv/larkmap';
 import React, { useEffect, useState } from 'react';
-
-const layerOptions = {
-  autoFit: true,
-  shape: 'circle',
-  blend: 'normal',
-  color: {
-    field: 'Area (km2)',
-    value: [
-      'rgb(247, 252, 240)',
-      'rgb(224, 243, 219)',
-      'rgb(204, 235, 197)',
-      'rgb(168, 221, 181)',
-      'rgb(123, 204, 196)',
-      'rgb(78, 179, 211)',
-      'rgb(43, 140, 190)',
-      'rgb(8, 104, 172)',
-      'rgb(8, 64, 129)',
-    ],
-    scale: { type: 'quantile' },
-  },
-  size: {
-    field: 'Area (km2)',
-    value: [0, 2, 4, 6, 8, 10],
-    scale: { type: 'quantile' },
-  },
-  state: {
-    active: false,
-  },
-  style: {
-    opacity: 0.8,
-    stroke: '#fff',
-    strokeWidth: 0.2,
-  },
-};
+import { MapConfig, LayerConfig } from './helper';
 
 export default () => {
   const [source, setSource] = useState({ data: [], parse: { type: 'json' } });
+  const [info, setInfo] = useState<Record<string, any>>({});
 
   useEffect(() => {
-    fetch('https://gw.alipayobjects.com/os/bmw-prod/f477ac63-178d-414d-84d7-c821658126ac.csv')
+    fetch('https://gw.alipayobjects.com/os/bmw-prod/404bd2f8-cf0d-4051-97cd-26b5b8d2b0c6.csv')
       .then((res) => res.text())
       .then((data) => {
         setSource({
@@ -50,9 +18,38 @@ export default () => {
       });
   }, []);
 
+  const onPointMouseenter = (e: any) => {
+    const { ChineseName, Province, Area, Longitude, Latitude } = e.feature;
+    setInfo({ ChineseName, Province, Area, Longitude, Latitude });
+  };
+
   return (
-    <LarkMap mapType="GaodeV1" style={{ height: '300px' }}>
-      <PointLayer {...layerOptions} source={source} />
+    <LarkMap {...MapConfig} style={{ height: '300px' }}>
+      <PointLayer
+        {...LayerConfig}
+        source={source}
+        onCreated={(layer) => layer?.on('mouseenter', onPointMouseenter)}
+      />
+      {info?.Longitude && (
+        <Popup
+          lngLat={{ lng: info?.Longitude, lat: info?.Latitude }}
+          closeButton={false}
+          closeOnClick={false}
+          anchor="bottom-left"
+        >
+          <p
+            style={{
+              width: 200,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}
+          >
+            名称：{info.ChineseName}
+          </p>
+          <p style={{ width: 250, overflow: 'hidden' }}>省份：{info.Province}</p>
+          <p style={{ width: 250, overflow: 'hidden' }}>面积：{info.Area}</p>
+        </Popup>
+      )}
     </LarkMap>
   );
 };

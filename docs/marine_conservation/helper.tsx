@@ -39,7 +39,7 @@ const LayerConfig = {
     active: true,
   },
   style: {
-    opacity: 1,
+    opacity: 0.9,
     stroke: '#fff',
     strokeWidth: 0.2,
   },

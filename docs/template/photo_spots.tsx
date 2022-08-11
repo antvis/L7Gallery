@@ -27,30 +27,25 @@ export default () => {
   const layerOptions = {
     autoFit: true,
     shape: 'circle',
-    size: 4,
+    size: 2,
     blend: 'additive',
     color: {
       field: 'value',
       value: [
-        '#0A3663',
-        '#1558AC',
-        '#3771D9',
-        '#4D89E5',
-        '#64A5D3',
-        '#72BED6',
-        '#83CED6',
-        '#A6E1E0',
-        '#B8EFE2',
-        '#D7F9F0',
+        'rgb(102,37,6)',
+        'rgb(153,52,4)',
+        'rgb(204,76,2)',
+        'rgb(236,112,20)',
+        'rgb(254,153,41)',
+        'rgb(254,196,79)',
+        'rgb(254,227,145)',
       ],
-    },
-    style: {
-      opacity: 0.6,
     },
   };
   useEffect(() => {
     fetchPointData();
   }, []);
+
   return (
     <LarkMap {...(config as LarkMapProps)} style={{ height: '500px' }}>
       <PointLayer {...(layerOptions as PointLayerProps)} source={pointData} />

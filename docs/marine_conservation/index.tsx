@@ -47,7 +47,7 @@ export default () => {
             名称：{info.ChineseName}
           </p>
           <p style={{ width: 250, overflow: 'hidden' }}>省份：{info.Province}</p>
-          <p style={{ width: 250, overflow: 'hidden' }}>面积：{info.Area}</p>
+          <p style={{ width: 250, overflow: 'hidden' }}>面积：{info.Area}(km2)</p>
         </Popup>
       )}
     </LarkMap>

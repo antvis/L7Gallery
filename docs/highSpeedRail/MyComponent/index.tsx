@@ -30,7 +30,7 @@ const MyComponent = () => {
     style: {
       fill: 'red',
       opacity: 1,
-      fontSize: 16,
+      fontSize: 14,
       stroke: '#fff',
       strokeWidth: 2,
       textAllowOverlap: false,

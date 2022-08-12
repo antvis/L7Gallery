@@ -1,5 +1,6 @@
 import { LarkMap, PointLayer, Scale, Zoom, CustomControl } from '@antv/larkmap';
 import type { LarkMapProps, PointLayerProps } from '@antv/larkmap';
+import type { ISceneConfig } from '@antv/l7';
 import React, { useEffect, useState } from 'react';
 import MyComponent from './MyComponent';
 import dataArr from './dataArr';
@@ -21,11 +22,14 @@ export default () => {
     mapType: 'GaodeV1',
     mapOptions: {
       style: 'light',
-      zoom: 8,
+      zoom: 6,
+      minZoom: 6,
+      maxZoom: 9,
     },
     style: {
       height: 500,
     },
+    logoPosition: 'bottomleft',
   };
   const pointLayerOptions: PointLayerProps = {
     id: 'myPoitLayer',
@@ -35,14 +39,15 @@ export default () => {
     //   value: 'text', // 以文本形式展示
     // },
     /* 
-      若是使用简单的圆点图层，建议使用 simple 代替 circle 以获得更好的性能
+      若是使用简单的圆点图层，建议使用 simple 代替 circle 以获得更好的性能，
+      注意：circle 与 simple 样式有所不同
       文档参考：https://antv-l7.gitee.io/zh/docs/api/point_layer/pointlayer#shape
     */
-    shape: 'simple',
+    shape: 'circle',
     size: 5,
     color: {
       field: 'address',
-      value: ['#8b0157'],
+      value: ['#f00', '#ff0'],
     },
     state: {
       active: {
@@ -50,9 +55,9 @@ export default () => {
       },
     },
     style: {
-      opacity: 0.8,
-      strokeWidth: 2,
-      stroke: '#401707',
+      opacity: 0.7,
+      strokeWidth: 1,
+      stroke: '#000',
     },
     source: {
       data: data || [],

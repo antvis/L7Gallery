@@ -1,51 +1,39 @@
+const typeList = [
+  { label: '水产种质资源保护区', color: '#ED9121', value: 'Aquatic Germplasm Reserve' },
+  { label: '海洋自然保护区', color: '#6A5ACD', value: 'Marine Nature Reserves' },
+  { label: '海洋公园', color: '#B0171F', value: 'Marine Park' },
+  { label: '特别海洋保护区', color: '#2E8B57', value: 'Special Marine Protected Areas' },
+];
+
 const MapConfig = {
   mapType: 'GaodeV1',
-  pitch: 90,
   mapOptions: {
     style: 'light',
-    center: [119.481623, 39.068625],
+    center: [119.481623, 38.068625],
     zoom: 6,
   },
 };
 
 const LayerConfig = {
+  autoFit: false,
   shape: 'circle',
   blend: 'normal',
-  textAllowOverlap: true,
   color: {
-    field: 'Area',
-    value: [
-      'rgb(247,252,245)',
-      'rgb(247,252,245)',
-      'rgb(247,252,245)',
-      'rgb(229,245,224)',
-      'rgb(229,245,224)',
-      'rgb(229,245,224)',
-      'rgb(199,233,192)',
-      'rgb(199,233,192)',
-      'rgb(199,233,192)',
-      'rgb(161,217,155)',
-      'rgb(161,217,155)',
-      'rgb(161,217,155)',
-      'rgb(116,196,118)',
-      'rgb(116,196,118)',
-      'rgb(116,196,118)',
-      'rgb(65,171,93)',
-      'rgb(35,139,69)',
-      'rgb(0,109,44)',
-      'rgb(0,68,27)',
-    ],
-    scale: { type: 'quantile' },
+    field: 'Type',
+    // @ts-ignore
+    value: ({ Type }) => {
+      const typeItem = typeList.find((item) => {
+        return item.value === Type;
+      });
+      return typeItem?.color ?? '#808A87';
+    },
   },
   size: {
     field: 'Area',
+    // @ts-ignore
     value: ({ Area }) => {
       return 4 + Number(Area) / 1000;
     },
-  },
-  label: {
-    field: 'ChineseName',
-    visible: true,
   },
   highlightColor: '#f00',
   state: {
@@ -56,7 +44,6 @@ const LayerConfig = {
     stroke: '#fff',
     strokeWidth: 0.2,
   },
-  iconfont: true,
 };
 
-export { MapConfig, LayerConfig };
+export { typeList, MapConfig, LayerConfig };

@@ -1,13 +1,14 @@
 import { PointLayer, LarkMap, Popup } from '@antv/larkmap';
 import React, { useEffect, useState } from 'react';
 import { MapConfig, LayerConfig } from './helper';
+import Legend from './Legend';
 
 export default () => {
   const [source, setSource] = useState({ data: [], parse: { type: 'json' } });
   const [info, setInfo] = useState<Record<string, any>>({});
 
   useEffect(() => {
-    fetch('https://gw.alipayobjects.com/os/bmw-prod/404bd2f8-cf0d-4051-97cd-26b5b8d2b0c6.csv')
+    fetch('https://gw.alipayobjects.com/os/bmw-prod/b056dc66-1d43-4167-a11e-9d0ada9cfec8.csv')
       .then((res) => res.text())
       .then((data) => {
         setSource({
@@ -25,10 +26,14 @@ export default () => {
 
   return (
     <LarkMap {...MapConfig} style={{ height: '300px' }}>
+      <Legend />
+
       <PointLayer
         {...LayerConfig}
         source={source}
-        onCreated={(layer) => layer?.on('mouseenter', onPointMouseenter)}
+        onCreated={(layer) => {
+          layer?.on('mouseenter', onPointMouseenter);
+        }}
       />
       {info?.Longitude && (
         <Popup

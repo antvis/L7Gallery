@@ -1,7 +1,7 @@
 ---
 nav:
-  title: Gallery
-  path: /gallery
+  title: 模板
+  path: /tempate
 ---
 
 ## 地图

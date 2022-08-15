@@ -1,6 +1,6 @@
 ---
 nav:
-  title: 专题图层
+  title: 图库
   path: /gallery
 ---
 

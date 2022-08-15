@@ -1,6 +1,6 @@
 ---
 nav:
-  title: Gallery
+  title: 图库
   path: /gallery
 ---
 

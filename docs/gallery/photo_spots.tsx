@@ -12,7 +12,7 @@ export default () => {
     mapOptions: {
       style: 'dark',
       center: [120.210792, 30.246026],
-      zoom: 1,
+      zoom: 0,
     },
   };
 
@@ -47,7 +47,7 @@ export default () => {
   }, []);
 
   return (
-    <LarkMap {...(config as LarkMapProps)} style={{ height: '500px' }}>
+    <LarkMap {...(config as LarkMapProps)} style={{ height: '700px' }}>
       <PointLayer {...(layerOptions as PointLayerProps)} source={pointData} />
     </LarkMap>
   );

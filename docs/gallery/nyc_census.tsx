@@ -4,9 +4,8 @@ import React, { useEffect, useState } from 'react';
 export default () => {
   const [ChoropletData, setChoropletData] = useState();
   const config = {
-    mapType: 'GaodeV1',
     mapOptions: {
-      style: 'normal',
+      style: 'dark',
       center: [120.210792, 30.246026],
       zoom: 1,
     },
@@ -25,7 +24,7 @@ export default () => {
         'rgb(189,0,38)',
       ],
     },
-    opacity: 0.8,
+    opacity: 0.6,
     strokeColor: 'rgb(231, 159, 213)',
     lineWidth: 0.5,
     state: {

@@ -2,6 +2,7 @@ import { Popup, useLayer, Marker, TextLayer } from '@antv/larkmap';
 import type { PopupProps, MarkerProps, TextLayerProps } from '@antv/larkmap';
 import type { ILngLat } from '@antv/l7';
 import React, { useEffect, useState } from 'react';
+import styles from './index.module.less';
 
 const MyComponent = () => {
   const [lngLat, setLngLat] = useState<ILngLat>({ lng: 120.223329, lat: 30.302465 });
@@ -16,6 +17,7 @@ const MyComponent = () => {
   const myPoitLayer = useLayer('myPoitLayer');
 
   const popupProps: PopupProps = {
+    className: styles['popup-area'],
     lngLat: lngLat,
     closeButton: false,
     closeOnClick: false,
@@ -43,7 +45,7 @@ const MyComponent = () => {
     },
   };
 
-  const moveFn = (e: any) => {
+  const enterFn = (e: any) => {
     const textVal = {
       lng: e.lngLat?.lng,
       lat: e.lngLat?.lat,
@@ -56,9 +58,9 @@ const MyComponent = () => {
   };
 
   useEffect(() => {
-    myPoitLayer?.on('mousemove', moveFn);
+    myPoitLayer?.on('mouseenter', enterFn);
     return () => {
-      myPoitLayer?.off('mousemove', moveFn);
+      myPoitLayer?.off('mouseenter', enterFn);
     };
   }, [myPoitLayer]);
 
@@ -67,14 +69,14 @@ const MyComponent = () => {
       <Popup {...popupProps}>
         <p>当前选中站点为: </p>
         <p>
-          <span style={{ color: 'red', fontSize: 14 }}>{busStopName}</span>
+          <span className={styles['select-color-info']}>{busStopName}</span>
         </p>
         <p>坐标为: </p>
         <p>
-          经度: <span style={{ color: 'red', fontSize: 14 }}>{lngLat.lng}</span>
+          经度: <span className={styles['select-color-info']}>{lngLat.lng}</span>
         </p>
         <p>
-          纬度: <span style={{ color: 'red', fontSize: 14 }}>{lngLat.lat}</span>
+          纬度: <span className={styles['select-color-info']}>{lngLat.lat}</span>
         </p>
       </Popup>
       <Marker {...markersProps} />

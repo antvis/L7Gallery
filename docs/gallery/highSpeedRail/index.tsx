@@ -17,7 +17,7 @@ export default () => {
   const [data, setData] = useState<IdataType[] | undefined>([]);
 
   const config: LarkMapProps = {
-    mapType: 'GaodeV1',
+    mapType: 'GaodeV2',
     mapOptions: {
       style: 'light',
       zoom: 6,

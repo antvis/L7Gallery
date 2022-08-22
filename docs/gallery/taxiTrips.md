@@ -2,9 +2,10 @@
 nav:
   title: 图库
   path: /gallery
+order: 10
 ---
 
-## 纽约公交路径
+## 10.纽约公交路径
 
 ## 赵千赐
 

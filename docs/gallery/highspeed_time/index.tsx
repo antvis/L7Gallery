@@ -26,7 +26,7 @@ export default () => {
 
   return (
     <LarkMap
-      mapType="GaodeV1"
+      mapType="GaodeV2"
       style={{ height: '60vh' }}
       mapOptions={{ style: 'dark', zoom: 4, center: [113.477391, 34.626256] }}
     >

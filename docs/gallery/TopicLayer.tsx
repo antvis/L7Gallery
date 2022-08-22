@@ -1,6 +1,5 @@
-import { IPickedFeature, Scene } from '@antv/l7';
-import { CustomControl, LarkMap, LarkMapProps, PointLayer, Popup, useScene } from '@antv/larkmap';
-import React, { useEffect, useMemo, useState } from 'react';
+import { CustomControl, LarkMap, LarkMapProps, PointLayer, Popup } from '@antv/larkmap';
+import React, { useEffect, useState } from 'react';
 
 const config = {
   mapType: 'GaodeV1',

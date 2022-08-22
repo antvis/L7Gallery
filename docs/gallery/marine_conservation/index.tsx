@@ -25,7 +25,7 @@ export default () => {
   };
 
   return (
-    <LarkMap {...MapConfig} style={{ height: '300px' }}>
+    <LarkMap {...MapConfig} style={{ height: '60vh' }}>
       <Legend />
 
       <PointLayer

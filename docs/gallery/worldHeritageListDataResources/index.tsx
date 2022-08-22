@@ -1,5 +1,5 @@
 import { LarkMap, PointLayer, CustomControl } from '@antv/larkmap';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styles from './index.less';
 export default () => {
   const [pointData, SetPointData] = useState([]);

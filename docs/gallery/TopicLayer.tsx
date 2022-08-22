@@ -2,7 +2,7 @@ import { CustomControl, LarkMap, LarkMapProps, PointLayer, Popup } from '@antv/l
 import React, { useEffect, useState } from 'react';
 
 const config = {
-  mapType: 'GaodeV1',
+  mapType: 'GaodeV2',
   mapOptions: {
     style: 'light',
     center: [120.210792, 30.246026],

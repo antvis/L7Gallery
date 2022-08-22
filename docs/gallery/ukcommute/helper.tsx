@@ -1,5 +1,5 @@
 const MapConfig = {
-  mapType: 'GaodeV1',
+  mapType: 'GaodeV2',
   mapOptions: {
     style: 'dark',
     center: [110.481623, 38.068625],

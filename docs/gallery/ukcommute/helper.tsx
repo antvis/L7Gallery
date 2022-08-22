@@ -19,7 +19,7 @@ const LayerConfig = {
     opacity: 0.8,
     lineType: 'solid',
     sourceColor: '#f00',
-    targetColor: '#ff0',
+    targetColor: '#f9f400',
   },
 };
 

@@ -1,6 +1,5 @@
 import { LarkMap, PointLayer, Popup } from '@antv/larkmap';
 import React, { useState } from 'react';
-import { californiaEarthquakes } from './mock';
 
 export default () => {
   const [pointData, SetPointData] = useState([]);
@@ -33,7 +32,7 @@ export default () => {
 
   return (
     <LarkMap
-      mapType="GaodeV1"
+      mapType="GaodeV2"
       style={{ height: '60vh' }}
       mapOptions={{
         style: 'dark',

@@ -1,7 +1,7 @@
 import { Popup, useLayer, Marker, TextLayer } from '@antv/larkmap';
 import type { PopupProps, MarkerProps, TextLayerProps } from '@antv/larkmap';
 import type { ILngLat } from '@antv/l7';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import styles from './index.module.less';
 
 const MyComponent = () => {
@@ -23,27 +23,31 @@ const MyComponent = () => {
     closeOnClick: false,
     anchor: 'top-left',
   };
-  const markersProps: MarkerProps = {
-    lngLat: lngLat,
-  };
-  const layerOptions: TextLayerProps = {
-    id: 'textOnelayer',
-    field: 'n',
-    style: {
-      fill: 'red',
-      opacity: 1,
-      fontSize: 14,
-      stroke: '#fff',
-      strokeWidth: 2,
-      textAllowOverlap: false,
-      padding: [5, 5],
-      textOffset: [120, 0],
-    },
-    source: {
-      data: textData,
-      parser: { type: 'json', x: 'lng', y: 'lat' },
-    },
-  };
+  const markersProps: MarkerProps = useMemo(() => {
+    return {
+      lngLat: lngLat,
+    };
+  }, [lngLat]);
+  const layerOptions: TextLayerProps = useMemo(() => {
+    return {
+      id: 'textOnelayer',
+      field: 'n',
+      style: {
+        fill: 'red',
+        opacity: 1,
+        fontSize: 14,
+        stroke: '#fff',
+        strokeWidth: 2,
+        textAllowOverlap: false,
+        padding: [5, 5],
+        textOffset: [120, 0],
+      },
+      source: {
+        data: textData,
+        parser: { type: 'json', x: 'lng', y: 'lat' },
+      },
+    };
+  }, [textData]);
 
   const enterFn = (e: any) => {
     const textVal = {

@@ -1,7 +1,7 @@
 import { LarkMap, PolygonLayer, Scale, Zoom, Popup } from '@antv/larkmap';
 import type { PolygonLayerProps, LarkMapProps, PopupProps } from '@antv/larkmap';
 import type { ILngLat } from '@antv/l7';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { colorArr } from './utils';
 import styles from './index.module.less';
 
@@ -29,19 +29,21 @@ const CountyUnemployment = () => {
   const [data, setData] = useState([]);
 
   /** 地图属性配置 */
-  const config: LarkMapProps = {
-    mapType: 'Mapbox',
-    mapOptions: {
-      style: 'light',
-      pitch: 0,
-      zoom: 3,
-      center: [-104.81959337883367, 44.146070623755435],
-    },
-    style: {
-      height: 700,
-    },
-    logoPosition: 'bottomleft',
-  };
+  const config: LarkMapProps = useMemo(() => {
+    return {
+      mapType: 'Mapbox',
+      mapOptions: {
+        style: 'light',
+        pitch: 0,
+        zoom: 3.5,
+        center: [-104.81959337883367, 44.146070623755435],
+      },
+      style: {
+        height: 700,
+      },
+      logoPosition: 'bottomleft',
+    };
+  }, [data]);
 
   const enterFn = (featureInfo: any) => {
     setLngLat(featureInfo.lngLat);
@@ -55,42 +57,46 @@ const CountyUnemployment = () => {
   };
 
   /** 面图层属性配置 */
-  const layerOptions: PolygonLayerProps = {
-    id: 'unemploymentRateLayer',
-    // autoFit: true,
-    shape: 'fill',
-    color: {
-      field: 'unemployment_rate',
-      value: colorArr,
-      scale: {
-        type: 'quantile',
+  const layerOptions: PolygonLayerProps = useMemo(() => {
+    return {
+      id: 'unemploymentRateLayer',
+      // autoFit: true,
+      shape: 'fill',
+      color: {
+        field: 'unemployment_rate',
+        value: colorArr,
+        scale: {
+          type: 'quantile',
+        },
       },
-    },
-    state: {
-      active: {
-        color: 'orange',
+      state: {
+        active: {
+          color: 'orange',
+        },
       },
-    },
-    style: {
-      opacity: 0.8,
-    },
-    blend: 'normal',
-    source: {
-      data: data,
-      parser: { type: 'geojson' },
-    },
-    onCreated: (layer) => {
-      layer?.on('mouseenter', enterFn);
-    },
-  };
+      style: {
+        opacity: 0.8,
+      },
+      blend: 'normal',
+      source: {
+        data: data,
+        parser: { type: 'geojson' },
+      },
+      onCreated: (layer) => {
+        layer?.on('mouseenter', enterFn);
+      },
+    };
+  }, [data, colorArr]);
   /** 信息框属性配置 */
-  const popupProps: PopupProps = {
-    className: styles['popup-area'],
-    lngLat: lngLat,
-    closeButton: false,
-    closeOnClick: false,
-    anchor: 'bottom',
-  };
+  const popupProps: PopupProps = useMemo(() => {
+    return {
+      className: styles['popup-area'],
+      lngLat: lngLat,
+      closeButton: false,
+      closeOnClick: false,
+      anchor: 'bottom',
+    };
+  }, [lngLat]);
 
   useEffect(() => {
     fetch('https://gw.alipayobjects.com/os/bmw-prod/9ae0f4f6-01fa-4e08-8f19-ab7ef4548e8c.json')

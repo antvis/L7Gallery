@@ -16,19 +16,21 @@ interface IdataType {
 export default () => {
   const [data, setData] = useState<IdataType[] | undefined>([]);
 
-  const config: LarkMapProps = {
-    mapType: 'GaodeV2',
-    mapOptions: {
-      style: 'light',
-      zoom: 6,
-      minZoom: 6,
-      maxZoom: 9,
-    },
-    style: {
-      height: 500,
-    },
-    logoPosition: 'bottomleft',
-  };
+  const config: LarkMapProps = useMemo(() => {
+    return {
+      mapType: 'GaodeV2',
+      mapOptions: {
+        style: 'light',
+        zoom: 6,
+        minZoom: 6,
+        maxZoom: 9,
+      },
+      style: {
+        height: 500,
+      },
+      logoPosition: 'bottomleft',
+    };
+  }, [data]);
   const pointLayerOptions: PointLayerProps = useMemo(() => {
     return {
       id: 'myPoitLayer',

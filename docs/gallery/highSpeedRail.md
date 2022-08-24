@@ -2,9 +2,10 @@
 nav:
   title: 图库
   path: /gallery
+order: 1
 ---
 
-## 高铁站点
+## 01.高铁站点
 
 <!-- author: gaoxuebo -->
 

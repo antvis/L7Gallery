@@ -2,13 +2,14 @@ const MapConfig = {
   mapType: 'GaodeV2',
   mapOptions: {
     style: 'dark',
-    center: [110.481623, 38.068625],
-    zoom: 1,
+    center: [0, 53],
+    zoom: 6,
+    pitch: 55,
   },
 };
 
 const LayerConfig = {
-  autoFit: true,
+  // autoFit: true,
   shape: 'arc3d',
   size: 1,
   blend: 'max',
@@ -23,20 +24,4 @@ const LayerConfig = {
   },
 };
 
-const LayerIconConfig = {
-  autoFit: true,
-  shape: 'arc3d',
-  size: 0,
-  blend: 'max',
-  style: {
-    opacity: 1,
-    lineType: 'solid',
-  },
-  animate: {
-    interval: 0.5,
-    trailLength: 0.5,
-    duration: 5,
-  },
-};
-
-export { MapConfig, LayerConfig, LayerIconConfig };
+export { MapConfig, LayerConfig };

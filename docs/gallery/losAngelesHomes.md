@@ -5,7 +5,7 @@ nav:
 order: 17
 ---
 
-## 17.洛杉矶过 200 万美元的房屋
+## 17.洛杉矶价值超过 200 万美元的房屋
 
 ### [author by websybin](https://github.com/websybin)
 

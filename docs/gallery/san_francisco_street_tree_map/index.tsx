@@ -45,8 +45,8 @@ function StreetMap() {
       }}
       onSceneLoaded={(s) => setScene(s)}
     >
-      {/* @ts-ignore */}
       {heatmapData && (
+        // @ts-ignore
         <HeatmapLayer
           size={{ field: 'sum', value: (v) => v.sum }}
           {...heatmapCfgs}

@@ -1,8 +1,11 @@
-import { ChoroplethLayer, ChoroplethLayerProps, LarkMap, LarkMapProps, Scale } from '@antv/larkmap';
+import { ChoroplethLayer, ChoroplethLayerProps, LarkMap, LarkMapProps } from '@antv/larkmap';
 import React, { useEffect, useState } from 'react';
 
 export default () => {
-  const [ChoropletData, setChoropletData] = useState();
+  const [ChoropletData, setChoropletData] = useState({
+    type: 'FeatureCollection',
+    features: [],
+  });
   const config = {
     mapOptions: {
       style: 'dark',
@@ -47,10 +50,9 @@ export default () => {
   return (
     <LarkMap {...(config as LarkMapProps)} style={{ height: '700px' }}>
       <ChoroplethLayer
-        {...(layerOptions as ChoroplethLayerProps)}
+        {...(layerOptions as unknown as ChoroplethLayerProps)}
         source={{ data: ChoropletData, parser: { type: 'geojson' } }}
       />
-      <Scale position={'bottomleft'} />
     </LarkMap>
   );
 };

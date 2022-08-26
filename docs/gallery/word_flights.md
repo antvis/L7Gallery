@@ -5,8 +5,8 @@ nav:
 order: 16
 ---
 
-## 16.1700-2016 美国陨石着陆
+## 16.世界航线
 
 ### [author by simplexiao](https://github.com/simplexiao)
 
-<code src= './meteorite_landings/index.tsx'>
+<code src= './word_flights/index.tsx'>

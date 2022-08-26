@@ -1,5 +1,5 @@
 const MapConfig = {
-  mapType: 'GaodeV1',
+  mapType: 'GaodeV2',
   mapOptions: {
     style: 'dark',
     center: [110.481623, 38.068625],
@@ -19,7 +19,7 @@ const LayerConfig = {
     opacity: 0.8,
     lineType: 'solid',
     sourceColor: '#f00',
-    targetColor: '#0f0',
+    targetColor: '#f9f400',
   },
 };
 

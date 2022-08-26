@@ -2,9 +2,10 @@
 nav:
   title: 图库
   path: /gallery
+order: 8
 ---
 
-## 线图层动画
+## 08.线图层动画
 
 ### [author yzg1025](https://github.com/yzg1025)
 

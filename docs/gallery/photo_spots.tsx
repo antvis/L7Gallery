@@ -7,7 +7,7 @@ export default () => {
     parser: { type: 'json', x: 'lat', y: 'lng' },
   });
   const config = {
-    mapType: 'GaodeV1',
+    mapType: 'GaodeV2',
 
     mapOptions: {
       style: 'dark',

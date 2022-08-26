@@ -32,7 +32,7 @@
   "dependencies": {
     "@antv/l7": "^2.9.21",
     "@antv/l7-maps": "^2.9.21",
-    "@antv/larkmap": "^0.0.3",
+    "@antv/larkmap": "^0.0.6",
     "@turf/turf": "^6.5.0",
     "antd": "^4.22.6",
     "popmotion": "9.4.2",

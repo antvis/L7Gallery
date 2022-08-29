@@ -109,7 +109,7 @@ function StreetMap() {
             />
           </div>
           <div className={styles.setItem}>
-            <div>设置size:</div>
+            <div>设置区间颜色:</div>
             <div className={styles.pickColor}>
               {heatmapCfgs.color.value.map((item, index) => {
                 return (
@@ -131,7 +131,7 @@ function StreetMap() {
             </div>
           </div>
           <div className={styles.setItem}>
-            <div>设置区间颜色:</div>
+            <div>设置size:</div>
             <Slider
               min={200}
               max={250}
@@ -153,7 +153,7 @@ function StreetMap() {
               tooltips: false,
             }}
           >
-            Copy Data.
+            复制配置
           </Paragraph>
         </div>
       </CustomControl>

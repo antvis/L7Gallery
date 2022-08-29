@@ -37,7 +37,8 @@
     "antd": "^4.22.6",
     "popmotion": "9.4.2",
     "react": "^18.0.0",
-    "turf": "^3.0.14"
+    "turf": "^3.0.14",
+    "h3-js": "^4.0.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.15.1",

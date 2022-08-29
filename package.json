@@ -35,15 +35,16 @@
     "@antv/larkmap": "^0.0.6",
     "@turf/turf": "^6.5.0",
     "antd": "^4.22.6",
+    "h3-js": "^4.0.0",
     "popmotion": "9.4.2",
     "react": "^18.0.0",
-    "turf": "^3.0.14",
-    "h3-js": "^4.0.0"
+    "turf": "^3.0.14"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.15.1",
     "@testing-library/react": "^13.0.0",
     "@types/jest": "^27.0.3",
+    "@types/lodash": "^4.14.184",
     "@umijs/fabric": "^2.8.1",
     "@umijs/test": "^3.0.5",
     "dumi": "^1.1.0",

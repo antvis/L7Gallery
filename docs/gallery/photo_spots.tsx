@@ -48,7 +48,7 @@ export default () => {
 
   return (
     <LarkMap {...(config as LarkMapProps)} style={{ height: '700px' }}>
-      <PointLayer {...(layerOptions as PointLayerProps)} source={pointData} />
+      <PointLayer {...(layerOptions as unknown as PointLayerProps)} source={pointData} />
     </LarkMap>
   );
 };

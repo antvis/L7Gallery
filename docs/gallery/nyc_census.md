@@ -2,11 +2,11 @@
 nav:
   title: 图库
   path: /gallery
-order: 4
+order: 9
 ---
 
-## 04.全球拍照最多的景点
+## 09.纽约市人口普查区
 
 ### [author by websybin](https://github.com/websybin)
 
-<code src= './photo_spots.tsx'>
+<code src= './nyc_census.tsx'>

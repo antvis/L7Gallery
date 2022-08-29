@@ -2,11 +2,11 @@
 nav:
   title: 图库
   path: /gallery
-order: 4
+order: 17
 ---
 
-## 04.全球拍照最多的景点
+## 17.洛杉矶价值超$200 万房屋
 
 ### [author by websybin](https://github.com/websybin)
 
-<code src= './photo_spots.tsx'>
+<code src= './losAngelesHomes.tsx'>

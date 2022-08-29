@@ -2,11 +2,11 @@
 nav:
   title: 图库
   path: /gallery
-order: 3
+order: 16
 ---
 
-## 03.中国海洋保护区在线地图
+## 16.世界航线
 
 ### [author by simplexiao](https://github.com/simplexiao)
 
-<code src= './marine_conservation/index.tsx'>
+<code src= './word_flights/index.tsx'>

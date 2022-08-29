@@ -1,4 +1,4 @@
-import { LarkMap, PolygonLayer, Popup, PopupProps } from '@antv/larkmap';
+import { LarkMap, PolygonLayer, Popup, PopupProps, Scale, Zoom } from '@antv/larkmap';
 import type { PolygonLayerProps, LarkMapProps } from '@antv/larkmap';
 import React, { useEffect, useState } from 'react';
 import styles from './index.less';
@@ -21,10 +21,10 @@ const CountyUnemployment = () => {
   const config: LarkMapProps = {
     mapType: 'Mapbox',
     mapOptions: {
-      style: 'light',
+      style: 'dark',
       pitch: 0,
-      zoom: 8.665670701339682,
-      center: [-80.38972773620316, 40.381035150924674],
+      zoom: 8.065670701339682,
+      center: [-80.00072773620316, 40.381035150924674],
     },
     style: {
       height: 700,
@@ -111,12 +111,15 @@ const CountyUnemployment = () => {
             </ul>
           </div>
         </Popup>
+        <Scale position={'bottomleft'} />
+        <Zoom position={'bottomright'} />
       </LarkMap>
+
       <LarkMap {...config}>
         <PolygonLayer {...layerOptions} />
         <Popup {...popupProps}>
           <div>
-            <div className={styles['title-area']}>Counties-Unemployment</div>
+            <div className={styles['title-area']}>travel-times</div>
             <ul className={styles['ul-style']}>
               {Object.keys(popInfo)?.map((key: string, index: number) => {
                 return (
@@ -129,6 +132,8 @@ const CountyUnemployment = () => {
             </ul>
           </div>
         </Popup>
+        <Scale position={'bottomleft'} />
+        <Zoom position={'bottomright'} />
       </LarkMap>
     </div>
   );

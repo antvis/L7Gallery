@@ -1,32 +1,20 @@
 import { LarkMap, PointLayer, Popup } from '@antv/larkmap';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export default () => {
-  const [pointData, SetPointData] = useState([]);
+  const [pointData, SetPointData] = useState({});
   const [info, setInfo] = useState<Record<string, any>>({});
-  const data = () => {
+
+  useEffect(() => {
     fetch('https://gw.alipayobjects.com/os/bmw-prod/141ea8df-e674-4ce4-ac91-ee619f411e36.json')
       .then((res) => res.json())
       .then((data) => {
         SetPointData(data);
       });
-    return {
-      type: 'FeatureCollection',
-      features: pointData.map((item: any) => {
-        return {
-          type: 'Feature',
-          properties: { ...item },
-          geometry: {
-            type: 'Point',
-            coordinates: [+item.Longitude, +item.Latitude],
-          },
-        };
-      }),
-    };
-  };
+  }, []);
 
   const onPointMouseenter = (e: any) => {
-    const { DateTime, Magnitude, Source, Depth, Latitude, Longitude } = e.feature.properties;
+    const { DateTime, Magnitude, Source, Depth, Latitude, Longitude } = e.feature;
     setInfo({ DateTime, Magnitude, Source, Depth, Latitude, Longitude });
   };
 
@@ -35,8 +23,8 @@ export default () => {
       mapType="GaodeV2"
       style={{ height: '60vh' }}
       mapOptions={{
-        style: 'dark',
-        zoom: 5.6,
+        style: 'light',
+        zoom: 5,
         center: [-122.80009283836715, 37.05881309947238],
       }}
     >
@@ -58,7 +46,7 @@ export default () => {
           opacity: 0.8,
           strokeWidth: 2,
         }}
-        source={{ data: data(), parser: { type: 'geojson' } }}
+        source={{ data: pointData, parser: { type: 'json', x: 'Longitude', y: 'Latitude' } }}
         state={{ active: true }}
         onCreated={(layer) => {
           layer?.on('mouseenter', onPointMouseenter);

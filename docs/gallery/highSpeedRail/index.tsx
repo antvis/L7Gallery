@@ -21,8 +21,8 @@ export default () => {
       mapType: 'GaodeV2',
       mapOptions: {
         style: 'light',
-        zoom: 6,
-        minZoom: 6,
+        zoom: 4,
+        minZoom: 5,
         maxZoom: 9,
       },
       style: {
@@ -45,10 +45,10 @@ export default () => {
         文档参考：https://antv-l7.gitee.io/zh/docs/api/point_layer/pointlayer#shape
       */
       shape: 'circle',
-      size: 5,
+      size: 7,
       color: {
         field: 'address',
-        value: ['#f00', 'rgba(159,180,15,1)'],
+        value: ['#f00', 'rgba(159, 180, 15, 1)'],
       },
       state: {
         active: {

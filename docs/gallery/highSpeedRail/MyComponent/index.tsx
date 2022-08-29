@@ -33,7 +33,7 @@ const MyComponent = () => {
       id: 'textOnelayer',
       field: 'n',
       style: {
-        fill: 'red',
+        fill: 'blue',
         opacity: 1,
         fontSize: 14,
         stroke: '#fff',
@@ -71,16 +71,18 @@ const MyComponent = () => {
   return (
     <div>
       <Popup {...popupProps}>
-        <p>当前选中站点为: </p>
+        <p className={styles['select-title']}>当前选中站点为: </p>
         <p>
           <span className={styles['select-color-info']}>{busStopName}</span>
         </p>
-        <p>坐标为: </p>
+        <p className={styles['select-title']}>坐标为: </p>
         <p>
-          经度: <span className={styles['select-color-info']}>{lngLat.lng}</span>
+          <span className={styles['select-title']}>经度: </span>
+          <span className={styles['select-color-info']}>{lngLat.lng}</span>
         </p>
         <p>
-          纬度: <span className={styles['select-color-info']}>{lngLat.lat}</span>
+          <span className={styles['select-title']}>纬度: </span>
+          <span className={styles['select-color-info']}>{lngLat.lat}</span>
         </p>
       </Popup>
       <Marker {...markersProps} />

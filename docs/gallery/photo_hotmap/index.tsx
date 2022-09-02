@@ -6,16 +6,14 @@ const heatmapCfg = {
   color: {
     field: 'sum',
     value: [
-      'rgb(255, 255, 255)',
-      'rgb(255, 247, 236)',
-      'rgb(254, 232, 200)',
-      'rgb(253, 212, 158)',
-      'rgb(253, 187, 132)',
-      'rgb(252, 141, 89)',
-      'rgb(239, 101, 72)',
-      'rgb(215, 48, 31)',
-      'rgb(179, 0, 0)',
-      'rgb(127, 0, 0)',
+      'rgba(255, 255, 255,0.5)',
+      'rgb(253, 141, 255)',
+      'rgb(252, 100, 255)',
+      'rgb(227, 26, 28)',
+      'rgb(189, 0, 38)',
+      'rgb(155, 0, 100)',
+      'rgb(255, 0, 200)',
+      'rgb(255, 0, 0)',
     ],
   },
   size: {
@@ -25,9 +23,14 @@ const heatmapCfg = {
       return sum * 200;
     },
   },
+  style: {
+    coverage: 0.9,
+    angle: 0,
+    opacity: 1.0,
+  },
 };
 
-function StreetMap() {
+function PhotohotMap() {
   const [heatmapData, setHeatmapData] = useState('');
 
   useEffect(() => {
@@ -42,9 +45,9 @@ function StreetMap() {
       style={{ height: '50vh' }}
       mapOptions={{
         style: 'dark',
-        center: [12.210792, 45.246026],
-        pitch: 43,
-        zoom: 3.4,
+        center: [10, 44],
+        pitch: 60,
+        zoom: 3.7,
       }}
     >
       <HeatmapLayer
@@ -55,7 +58,7 @@ function StreetMap() {
           transforms: [
             {
               type: 'hexagon',
-              size: 15000,
+              size: 30000,
               field: 'value',
               method: 'sum',
             },
@@ -66,4 +69,4 @@ function StreetMap() {
   );
 }
 
-export default StreetMap;
+export default PhotohotMap;

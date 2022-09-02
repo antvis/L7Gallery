@@ -2,11 +2,11 @@
 nav:
   title: 图库
   path: /gallery
-order: 16
+order: 20
 ---
 
-## 16.热力
+## 20.拍照景点-蜂窝聚合图
 
 ### [author by simplexiao](https://github.com/simplexiao)
 
-<code src= './gridhot/index.tsx'>
+<code src= './photo_hotmap/index.tsx'>

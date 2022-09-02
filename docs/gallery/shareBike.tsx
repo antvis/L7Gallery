@@ -51,10 +51,21 @@ export default () => {
     shape: 'circle',
     size: {
       field: 'point_count',
-      value: [10, 15, 20, 25, 30],
+      value: [15, 20, 25, , 30, 35],
     },
     blend: 'normal',
     color: 'rgb(153,52,4)',
+  };
+  const layerOptionpoint = {
+    autoFit: false,
+    shape: { field: 'point_count', value: 'text' },
+    size: 15,
+    color: '#fff',
+    style: {
+      opacity: 1,
+      strokeWidth: 0,
+      stroke: '#fff',
+    },
   };
 
   const layerOption = {
@@ -76,6 +87,7 @@ export default () => {
   return (
     <LarkMap {...(config as LarkMapProps)} style={{ height: '700px' }}>
       <PointLayer {...(layerOptions as unknown as PointLayerProps)} source={pointData} />
+      <PointLayer {...(layerOptionpoint as unknown as PointLayerProps)} source={pointData} />
       <PolygonLayer {...(layerOption as unknown as PolygonLayerProps)} source={PolygonData} />
     </LarkMap>
   );

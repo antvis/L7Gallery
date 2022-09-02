@@ -19,7 +19,6 @@ const heatmapCfg = {
   size: {
     field: 'sum',
     value: ({ sum }) => {
-      console.log(sum);
       return sum * 200;
     },
   },
@@ -46,7 +45,7 @@ function PhotohotMap() {
       mapOptions={{
         style: 'dark',
         center: [10, 44],
-        pitch: 60,
+        pitch: 40,
         zoom: 3.7,
       }}
     >
@@ -58,7 +57,7 @@ function PhotohotMap() {
           transforms: [
             {
               type: 'hexagon',
-              size: 30000,
+              size: 50000,
               field: 'value',
               method: 'sum',
             },

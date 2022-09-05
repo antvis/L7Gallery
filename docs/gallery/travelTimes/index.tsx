@@ -2,12 +2,15 @@ import { LarkMap, PolygonLayer, Popup, PopupProps, Scale, Zoom } from '@antv/lar
 import type { PolygonLayerProps, LarkMapProps } from '@antv/larkmap';
 import React, { useEffect, useState } from 'react';
 import styles from './index.less';
-import { ILngLat } from '@antv/l7';
+import { ILngLat, Scene } from '@antv/l7';
+import { set } from 'lodash';
 
 const CountyUnemployment = () => {
   const [lngLat, setLngLat] = useState<ILngLat>();
   const [popInfo, setPopINfo] = useState<Record<string, string>>({});
   const [data, setData] = useState({});
+  const [mapScene, setMapScene] = useState<Scene>();
+  const [center, setCenter] = useState<[number, number]>([-80.00072773620316, 40.381035150924674]);
 
   useEffect(() => {
     fetch('https://gw.alipayobjects.com/os/bmw-prod/f93cbf2a-76c7-45e0-8fd5-89f1bd4a974b.json')
@@ -24,13 +27,25 @@ const CountyUnemployment = () => {
       style: 'dark',
       pitch: 0,
       zoom: 8.065670701339682,
-      center: [-80.00072773620316, 40.381035150924674],
+      center: center,
     },
     style: {
       height: 700,
     },
     logoPosition: 'bottomleft',
+    onSceneLoaded(e) {
+      setMapScene(e);
+    },
   };
+
+  useEffect(() => {
+    if (mapScene) {
+      mapScene.on('dragend', (e) => {
+        setCenter([e.lngLat.lng, e.lngLat.lat]);
+        set(config, 'mapOptions.center', [e.lngLat.lng, e.lngLat.lat]);
+      });
+    }
+  }, [mapScene]);
 
   /** 面图层属性配置 */
   const layerOptions: PolygonLayerProps = {
@@ -69,7 +84,7 @@ const CountyUnemployment = () => {
       parser: { type: 'geojson' },
     },
     onCreated: (layer) => {
-      layer?.on('mouseenter', enterFunction);
+      layer?.on('click', enterFunction);
     },
   };
 

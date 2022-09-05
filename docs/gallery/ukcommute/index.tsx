@@ -1,6 +1,6 @@
-import { LineLayer, LarkMap, Popup } from '@antv/larkmap';
+import { LineLayer, LarkMap, LarkMapProps, LineLayerProps } from '@antv/larkmap';
 import React, { useEffect, useState } from 'react';
-import { MapConfig, LayerConfig, LayerIconConfig } from './helper';
+import { MapConfig, LayerConfig } from './helper';
 
 export default () => {
   const [source, setSource] = useState({ data: [], parse: { type: 'json' } });
@@ -24,8 +24,8 @@ export default () => {
   }, []);
 
   return (
-    <LarkMap {...MapConfig} style={{ height: '60vh' }}>
-      <LineLayer {...LayerConfig} source={source} />
+    <LarkMap {...(MapConfig as LarkMapProps)} style={{ height: '60vh' }}>
+      <LineLayer {...(LayerConfig as LineLayerProps)} source={source} />
     </LarkMap>
   );
 };

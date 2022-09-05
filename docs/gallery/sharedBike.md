@@ -2,11 +2,11 @@
 nav:
   title: 图库
   path: /gallery
-order: 9
+order: 19
 ---
 
-## 09.纽约市人口普查区
+## 19.共享单单车区域和点位
 
 ### [author by websybin](https://github.com/websybin)
 
-<code src= './nyc_census.tsx'>
+<code src= './shareBike.tsx'>

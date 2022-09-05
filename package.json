@@ -32,15 +32,21 @@
   "dependencies": {
     "@antv/l7": "^2.9.21",
     "@antv/l7-maps": "^2.9.21",
-    "@antv/larkmap": "^0.0.6",
+    "@antv/larkmap": "^0.0.9",
+    "@turf/turf": "^6.5.0",
     "antd": "^4.22.6",
-    "popmotion": "^9.4.2",
-    "react": "^18.0.0"
+    "h3-js": "^4.0.0",
+    "popmotion": "9.4.2",
+    "react": "^18.0.0",
+    "react-color": "^2.19.3",
+    "turf": "^3.0.14"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.15.1",
     "@testing-library/react": "^13.0.0",
     "@types/jest": "^27.0.3",
+    "@types/lodash": "^4.14.184",
+    "@types/react": "^18.0.18",
     "@umijs/fabric": "^2.8.1",
     "@umijs/test": "^3.0.5",
     "dumi": "^1.1.0",

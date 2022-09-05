@@ -1,7 +1,7 @@
-import { LarkMap, PolygonLayer, Scale, Zoom, Popup } from '@antv/larkmap';
-import type { PolygonLayerProps, LarkMapProps, PopupProps } from '@antv/larkmap';
+import { LarkMap, Scale, Zoom, Popup, ChoroplethLayer } from '@antv/larkmap';
+import type { LarkMapProps, PopupProps, ChoroplethLayerProps } from '@antv/larkmap';
 import type { ILngLat } from '@antv/l7';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { colorArr } from './utils';
 import styles from './index.module.less';
 
@@ -13,35 +13,37 @@ interface IpopInfo {
   AWATER?: number;
 }
 
-/** 结合 https://l7plot.antv.vision/zh/docs/api/composite-layers/polygon-layer#%E4%B8%80%E9%85%8D%E7%BD%AE */
+/** 结合 https://l7plot.antv.vision/zh/docs/api/composite-layers/choropleth-layer */
 const CountyUnemployment = () => {
   const [lngLat, setLngLat] = useState<ILngLat>({
-    lng: -104.30931729871608,
-    lat: 49.02755406229335,
+    lng: -97.39054553110171,
+    lat: 39.448335349067435,
   });
   const [popInfo, setPopINfo] = useState<IpopInfo>({
-    NAME: 'Sheridan',
-    ALAND: 4340307007,
-    unemployment_rate: 2.7,
+    NAME: 'Cloud',
+    ALAND: 1852726628,
+    unemployment_rate: 4.4,
     LSAD: '06',
-    AWATER: 75071798,
+    AWATER: 6859887,
   });
   const [data, setData] = useState([]);
 
   /** 地图属性配置 */
-  const config: LarkMapProps = {
-    mapType: 'Mapbox',
-    mapOptions: {
-      style: 'light',
-      pitch: 0,
-      zoom: 3,
-      center: [-104.81959337883367, 44.146070623755435],
-    },
-    style: {
-      height: 700,
-    },
-    logoPosition: 'bottomleft',
-  };
+  const config: LarkMapProps = useMemo(() => {
+    return {
+      mapType: 'Mapbox',
+      mapOptions: {
+        style: 'light',
+        pitch: 0,
+        zoom: 3.7,
+        center: [-97.39054553110171, 39.448335349067435],
+      },
+      style: {
+        height: 700,
+      },
+      logoPosition: 'bottomleft',
+    };
+  }, [data]);
 
   const enterFn = (featureInfo: any) => {
     setLngLat(featureInfo.lngLat);
@@ -54,43 +56,51 @@ const CountyUnemployment = () => {
     });
   };
 
-  /** 面图层属性配置 */
-  const layerOptions: PolygonLayerProps = {
-    id: 'unemploymentRateLayer',
-    // autoFit: true,
-    shape: 'fill',
-    color: {
-      field: 'unemployment_rate',
-      value: colorArr,
-      scale: {
-        type: 'quantile',
+  /** 区域图层属性配置 */
+  const choroplethOptions: ChoroplethLayerProps = useMemo(() => {
+    return {
+      id: 'unemploymentRateLayer',
+      // autoFit: true,
+      fillColor: {
+        field: 'unemployment_rate',
+        value: colorArr,
+        scale: {
+          type: 'quantile',
+        },
       },
-    },
-    state: {
-      active: {
-        color: 'orange',
-      },
-    },
-    style: {
       opacity: 0.8,
-    },
-    blend: 'normal',
-    source: {
-      data: data,
-      parser: { type: 'geojson' },
-    },
-    onCreated: (layer) => {
-      layer?.on('mouseenter', enterFn);
-    },
-  };
+      // strokeColor: 'orange',
+      lineWidth: 0.2,
+      lineOpacity: 1,
+      state: {
+        active: { strokeColor: 'orange', lineWidth: 1.5, lineOpacity: 0.8 },
+        select: { strokeColor: 'red', lineWidth: 1.5, lineOpacity: 0.8 },
+      },
+      label: {
+        field: 'NAME',
+        visible: false,
+        style: { fill: 'blue', fontSize: 12, stroke: '#fff', strokeWidth: 2 },
+      },
+      source: {
+        data: data,
+        parser: { type: 'geojson' },
+      },
+      onCreated: (layer) => {
+        layer?.on('mouseenter', enterFn);
+      },
+      blend: 'normal',
+    };
+  }, [data, colorArr]);
   /** 信息框属性配置 */
-  const popupProps: PopupProps = {
-    className: styles['popup-area'],
-    lngLat: lngLat,
-    closeButton: false,
-    closeOnClick: false,
-    anchor: 'bottom',
-  };
+  const popupProps: PopupProps = useMemo(() => {
+    return {
+      className: styles['popup-area'],
+      lngLat: lngLat,
+      closeButton: false,
+      closeOnClick: false,
+      anchor: 'bottom',
+    };
+  }, [lngLat]);
 
   useEffect(() => {
     fetch('https://gw.alipayobjects.com/os/bmw-prod/9ae0f4f6-01fa-4e08-8f19-ab7ef4548e8c.json')
@@ -102,8 +112,8 @@ const CountyUnemployment = () => {
 
   return (
     <LarkMap {...config}>
-      {/* 面图层 */}
-      <PolygonLayer {...layerOptions} />
+      {/* 区域图层 */}
+      <ChoroplethLayer {...choroplethOptions} />
       {/* 信息框 */}
       <Popup {...popupProps}>
         <div>

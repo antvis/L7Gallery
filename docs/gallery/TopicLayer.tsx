@@ -1,4 +1,4 @@
-import { CustomControl, LarkMap, LarkMapProps, PointLayer, Popup } from '@antv/larkmap';
+import { LarkMap, LarkMapProps, PointLayer, Popup } from '@antv/larkmap';
 import React, { useEffect, useState } from 'react';
 
 const config = {
@@ -52,7 +52,6 @@ export default () => {
   };
   return (
     <LarkMap {...(config as LarkMapProps)} style={{ height: '500px' }}>
-      <CustomControl className="myCustomControl" position="topleft"></CustomControl>
       <PointLayer
         source={{ data: pointData, parser: { type: 'json', x: 'lat', y: 'lng' } }}
         onCreated={onCreated}

@@ -3,7 +3,6 @@ import type { PolygonLayerProps, LarkMapProps } from '@antv/larkmap';
 import React, { useEffect, useState } from 'react';
 import styles from './index.less';
 import { ILngLat, Scene } from '@antv/l7';
-import { set } from 'lodash';
 
 const CountyUnemployment = () => {
   const [lngLat, setLngLat] = useState<ILngLat>();
@@ -42,7 +41,6 @@ const CountyUnemployment = () => {
     if (mapScene) {
       mapScene.on('dragend', (e) => {
         setCenter([e.lngLat.lng, e.lngLat.lat]);
-        set(config, 'mapOptions.center', [e.lngLat.lng, e.lngLat.lat]);
       });
     }
   }, [mapScene]);

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 
 /** 地图属性配置 */
 const larkMapConfig: LarkMapProps = {
-  mapType: 'GaodeV1',
+  mapType: 'GaodeV2',
   mapOptions: {
     style: 'light',
     pitch: 0,

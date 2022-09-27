@@ -1,10 +1,17 @@
-import { LarkMap, LarkMapProps, CustomControl } from '@antv/larkmap';
+import {
+  LarkMap,
+  LarkMapProps,
+  CustomControl,
+  PointLayer,
+  PointLayerProps,
+  ChoroplethLayer,
+  ChoroplethLayerProps,
+} from '@antv/larkmap';
 import React, { useEffect, useState } from 'react';
 import { Tabs, Collapse } from 'antd';
-import { DownOutlined, UpOutlined, AndroidOutlined, AppleOutlined } from '@ant-design/icons';
+import { tabList, pointLayerStyle, choroplethLayerStyle, SELECT_TYPE } from './contents';
 import styles from './index.module.less';
 
-import { tabList } from './contents';
 const { Panel } = Collapse;
 
 export default () => {
@@ -20,6 +27,8 @@ export default () => {
     data: [],
     parser: { type: 'geojson' },
   });
+
+  const [selectType, setSelectType] = useState<string>();
   const config = {
     mapType: 'GaodeV2',
     mapOptions: {
@@ -49,6 +58,12 @@ export default () => {
     fetchPolygonData();
   }, []);
 
+  const onChangeType = (e: string) => {
+    setSelectType(e);
+  };
+
+  console.log(selectType);
+
   return (
     <LarkMap
       {...(config as LarkMapProps)}
@@ -56,16 +71,17 @@ export default () => {
       style={{ height: '700px' }}
     >
       <CustomControl className={styles['electric_vehicle_sharing-right']} position="topright">
-        <Tabs>
+        <Tabs onChange={onChangeType}>
           {tabList.map((item) => {
             return (
               <Tabs.TabPane tab={item.label} key={item.key}>
-                {item.children}
+                {item.children(onChangeType, selectType)}
               </Tabs.TabPane>
             );
           })}
         </Tabs>
       </CustomControl>
+
       <CustomControl className={styles['electric_vehicle_sharing-left']} position="topleft">
         <Collapse defaultActiveKey={['1']} bordered={false} expandIconPosition="end">
           <Panel header="杭州市共享电单车分布情况" key="1">
@@ -73,6 +89,13 @@ export default () => {
           </Panel>
         </Collapse>
       </CustomControl>
+
+      <PointLayer {...(pointLayerStyle as unknown as PointLayerProps)} source={pointData} />
+      {/* 区域图层数据 */}
+      <ChoroplethLayer
+        {...(choroplethLayerStyle as unknown as ChoroplethLayerProps)}
+        source={PolygonData}
+      />
     </LarkMap>
   );
 };

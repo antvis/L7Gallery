@@ -1,6 +1,7 @@
 import React from 'react';
 import { Badge } from 'antd';
 import Icon from '@ant-design/icons';
+import styles from './index.module.less';
 
 const TotalIcon = () => {
   return (
@@ -144,6 +145,17 @@ const FaultVehicleIcon = () => {
   );
 };
 
+export const SELECT_TYPE = {
+  ALL: 'ALL',
+  BIKEAVAILABILITY: 'bikeAvailability',
+  BIKEUNAVAILABILITY: 'bikeUnAvailability',
+  POINTZONEMORE: 'pointZoneMore',
+  POINTZONELESS: 'pointZoneLess',
+  BICKILLEGALPARKING: 'bikeIllegalParking',
+  BICKLOWERPOWER: 'bikeLowpower',
+  BICKTHEFAULT: 'bikeTheFault',
+};
+
 export const tabList = [
   {
     label: (
@@ -152,14 +164,20 @@ export const tabList = [
         总分布
       </span>
     ),
-    key: 'all',
-    children: (
+    key: SELECT_TYPE.ALL,
+    children: (onChangeType: (str: string) => void, selectType: string) => (
       <div>
-        <li>
+        <li
+          onClick={() => onChangeType(SELECT_TYPE.POINTZONEMORE)}
+          className={selectType === SELECT_TYPE.POINTZONEMORE ? styles['selected-item'] : ''}
+        >
           <Icon style={{ color: 'rgba(0,0,0,1)' }} component={MoreParkingIcon} />
           车辆过多的停放点
         </li>
-        <li>
+        <li
+          onClick={() => onChangeType(SELECT_TYPE.POINTZONELESS)}
+          className={selectType === SELECT_TYPE.POINTZONELESS ? styles['selected-item'] : ''}
+        >
           <Icon style={{ color: 'rgba(0,0,0,1)' }} component={LessParkingIcon} />
           车辆过少的停放点
         </li>
@@ -173,10 +191,13 @@ export const tabList = [
         可用车
       </span>
     ),
-    key: 'available',
-    children: (
+    key: SELECT_TYPE.BIKEAVAILABILITY,
+    children: (onChangeType: (str: string) => void, selectType: string) => (
       <div>
-        <li>
+        <li
+          onClick={() => onChangeType(SELECT_TYPE.BICKILLEGALPARKING)}
+          className={selectType === SELECT_TYPE.BICKILLEGALPARKING ? styles['selected-item'] : ''}
+        >
           <Icon style={{ color: 'rgba(0,0,0,1)' }} component={ViolationsParkingIcon} />
           违规停放的车辆
         </li>
@@ -190,14 +211,20 @@ export const tabList = [
         不可用车
       </span>
     ),
-    key: 'disavailable',
-    children: (
+    key: SELECT_TYPE.BIKEUNAVAILABILITY,
+    children: (onChangeType: (str: string) => void, selectType: string) => (
       <div>
-        <li>
+        <li
+          onClick={() => onChangeType(SELECT_TYPE.BICKLOWERPOWER)}
+          className={selectType === SELECT_TYPE.BICKLOWERPOWER ? styles['selected-item'] : ''}
+        >
           <Icon style={{ color: 'rgba(0,0,0,1)' }} component={LowPowerIcon} />
           电量低的车辆
         </li>
-        <li>
+        <li
+          onClick={() => onChangeType(SELECT_TYPE.POINTZONELESS)}
+          className={selectType === SELECT_TYPE.POINTZONELESS ? styles['selected-item'] : ''}
+        >
           <Icon style={{ color: 'rgba(0,0,0,1)' }} component={FaultVehicleIcon} />
           故障车辆
         </li>
@@ -205,3 +232,15 @@ export const tabList = [
     ),
   },
 ];
+
+export const pointLayerStyle = {
+  autoFit: true,
+  shape: 'circle',
+  color: 'blue',
+};
+
+export const choroplethLayerStyle = {
+  opacity: 0.3,
+  strokeColor: 'blue',
+  lineWidth: 1,
+};

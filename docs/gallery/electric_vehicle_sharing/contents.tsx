@@ -165,18 +165,26 @@ export const tabList = [
       </span>
     ),
     key: SELECT_TYPE.ALL,
-    children: (onChangeType: (str: string) => void, selectType: string) => (
+    children: (onChangeType: (str: string) => void, selectType: string | undefined) => (
       <div>
         <li
           onClick={() => onChangeType(SELECT_TYPE.POINTZONEMORE)}
-          className={selectType === SELECT_TYPE.POINTZONEMORE ? styles['selected-item'] : ''}
+          className={
+            selectType === SELECT_TYPE.POINTZONEMORE
+              ? styles['electric_vehicle_sharing_selected-item']
+              : ''
+          }
         >
           <Icon style={{ color: 'rgba(0,0,0,1)' }} component={MoreParkingIcon} />
           车辆过多的停放点
         </li>
         <li
           onClick={() => onChangeType(SELECT_TYPE.POINTZONELESS)}
-          className={selectType === SELECT_TYPE.POINTZONELESS ? styles['selected-item'] : ''}
+          className={
+            selectType === SELECT_TYPE.POINTZONELESS
+              ? styles['electric_vehicle_sharing_selected-item']
+              : ''
+          }
         >
           <Icon style={{ color: 'rgba(0,0,0,1)' }} component={LessParkingIcon} />
           车辆过少的停放点
@@ -192,11 +200,15 @@ export const tabList = [
       </span>
     ),
     key: SELECT_TYPE.BIKEAVAILABILITY,
-    children: (onChangeType: (str: string) => void, selectType: string) => (
+    children: (onChangeType: (str: string) => void, selectType: string | undefined) => (
       <div>
         <li
           onClick={() => onChangeType(SELECT_TYPE.BICKILLEGALPARKING)}
-          className={selectType === SELECT_TYPE.BICKILLEGALPARKING ? styles['selected-item'] : ''}
+          className={
+            selectType === SELECT_TYPE.BICKILLEGALPARKING
+              ? styles['electric_vehicle_sharing_selected-item']
+              : ''
+          }
         >
           <Icon style={{ color: 'rgba(0,0,0,1)' }} component={ViolationsParkingIcon} />
           违规停放的车辆
@@ -212,18 +224,26 @@ export const tabList = [
       </span>
     ),
     key: SELECT_TYPE.BIKEUNAVAILABILITY,
-    children: (onChangeType: (str: string) => void, selectType: string) => (
+    children: (onChangeType: (str: string) => void, selectType: string | undefined) => (
       <div>
         <li
           onClick={() => onChangeType(SELECT_TYPE.BICKLOWERPOWER)}
-          className={selectType === SELECT_TYPE.BICKLOWERPOWER ? styles['selected-item'] : ''}
+          className={
+            selectType === SELECT_TYPE.BICKLOWERPOWER
+              ? styles['electric_vehicle_sharing_selected-item']
+              : ''
+          }
         >
           <Icon style={{ color: 'rgba(0,0,0,1)' }} component={LowPowerIcon} />
           电量低的车辆
         </li>
         <li
           onClick={() => onChangeType(SELECT_TYPE.POINTZONELESS)}
-          className={selectType === SELECT_TYPE.POINTZONELESS ? styles['selected-item'] : ''}
+          className={
+            selectType === SELECT_TYPE.POINTZONELESS
+              ? styles['electric_vehicle_sharing_selected-item']
+              : ''
+          }
         >
           <Icon style={{ color: 'rgba(0,0,0,1)' }} component={FaultVehicleIcon} />
           故障车辆

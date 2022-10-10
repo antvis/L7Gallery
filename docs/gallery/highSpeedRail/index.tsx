@@ -26,7 +26,7 @@ export default () => {
         maxZoom: 9,
       },
       style: {
-        height: 500,
+        height: 700,
       },
       logoPosition: 'bottomleft',
     };
@@ -48,15 +48,15 @@ export default () => {
       size: 7,
       color: {
         field: 'address',
-        value: ['#f00', 'rgba(159, 180, 15, 1)'],
+        value: ['#00a4e4', '#ff6a00'],
       },
       state: {
         active: {
-          color: 'pink', // 设置鼠标划过点的颜色
+          color: '#33a02c', // 设置鼠标划过点的颜色
         },
       },
       style: {
-        opacity: 0.7,
+        opacity: 0.9,
       },
       source: {
         data: data,

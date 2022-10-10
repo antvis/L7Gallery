@@ -1,0 +1,83 @@
+.normalWidthStyle {
+  // 设置右侧sider的展开与收起
+  .ant-layout-sider {
+    flex: 0 0 426px !important;
+    width: 426px !important;
+    max-width: 426px !important;
+    height: calc(100vh - 50px);
+  }
+  .ant-layout-sider-collapsed {
+    flex: 0 0 0 !important;
+    width: 0 !important;
+    max-width: 0 !important;
+    height: calc(100vh - 50px);
+  }
+}
+.bigWidthStyle {
+  // 设置右侧sider的展开与收起
+  .ant-layout-sider {
+    flex: 0 0 650px !important;
+    width: 650px !important;
+    max-width: 650px !important;
+    height: calc(100vh - 50px);
+  }
+  .ant-layout-sider-collapsed {
+    flex: 0 0 0 !important;
+    width: 0 !important;
+    max-width: 0 !important;
+    height: calc(100vh - 50px);
+  }
+}
+
+.mapAreaNormalWidth {
+  :global {
+    .normalWidthStyle;
+  }
+}
+.mapAreaBigWidth {
+  :global {
+    .bigWidthStyle;
+  }
+}
+
+.mapArea {
+  height: 100vh;
+
+  .headerArea {
+    z-index: 9;
+
+    display: flex;
+    justify-content: space-between;
+    height: 50px;
+    padding: 0 16px !important;
+    line-height: 50px;
+    background: #fff;
+    border-bottom: 1px solid #ececec;
+    box-shadow: 0 0 6px #000a1a1a;
+  }
+
+  .siderWrapper {
+    position: relative;
+
+    .but {
+      position: absolute;
+      top: calc(50% - 32px);
+      left: -16px;
+      z-index: 999;
+      width: 16px;
+      height: 64px;
+      color: #a6a5a6;
+      line-height: 64px;
+      text-align: center;
+      background: hsla(0, 0%, 100%, 0.85);
+      border-radius: 4px 0 0 4px;
+      cursor: pointer;
+    }
+    .silderArea {
+      position: relative;
+      overflow-x: hidden;
+      overflow-y: auto;
+      color: #000;
+    }
+  }
+}

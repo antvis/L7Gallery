@@ -2,10 +2,10 @@
 nav:
   title: 图库
   path: /gallery
-order: 19
+order: 20
 ---
 
-## 19.共享单单车区域和点位
+## 20.共享单单车区域和点位
 
 ### [author by websybin](https://github.com/websybin)
 

@@ -1,0 +1,77 @@
+@height: 28px;
+@borderRadius: 6px;
+@fontSize: 12px;
+
+.configure {
+  z-index: 1000;
+  height: 70vh;
+  background-color: #fff;
+  border-left: 1px solid #e1e3e4;
+  border-radius: 0 4px 4px 0;
+  box-shadow: 10px 0 8px -10px rgba(0, 0, 0, 0.1);
+  transition: width 0.5s 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  &-content {
+    padding: 16px;
+    color: #333;
+    &-header {
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+}
+
+.attribute {
+  :global {
+    .ant-formily-item {
+      font-size: @fontSize;
+    }
+    .ant-select {
+      font-size: @fontSize;
+      .ant-select-selector {
+        height: @height;
+        border-radius: 4px;
+      }
+      .ant-select-selection-item {
+        line-height: 26px;
+      }
+    }
+    .ant-input-number {
+      height: @height;
+      border-radius: @borderRadius;
+      .ant-input-number-input {
+        height: @height;
+      }
+    }
+    .ant-slider {
+      margin: 8px 10px;
+    }
+    .ant-tag {
+      line-height: 1.3;
+    }
+    .ant-formily-color-picker {
+      height: @height;
+      border-radius: @borderRadius;
+    }
+    .ant-formily-item-control-content-component {
+      line-height: @height;
+    }
+    .ant-custom-formily-form-collapse .ant-collapse-item {
+      .ant-collapse-header {
+        padding: 0 0 12px 0 !important;
+      }
+      .ant-collapse-content > .ant-collapse-content-box {
+        padding: 0 0 0 15px !important;
+      }
+    }
+  }
+}
+
+.select {
+  width: 150px;
+}
+.field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}

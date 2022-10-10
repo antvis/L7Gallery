@@ -1,0 +1,40 @@
+.icons {
+  width: 20px;
+  height: 15px;
+  margin-right: 5px;
+}
+.tab {
+  :global {
+    .ant-tabs-nav-list {
+      display: flex;
+      flex: 1;
+      .ant-tabs-tab {
+        flex: 1;
+        justify-content: center;
+      }
+      .ant-tabs-content {
+        height: 100%;
+        border: 1px solid green;
+      }
+    }
+  }
+}
+.form {
+  :global {
+    .ant-input {
+      border-radius: 6px;
+    }
+    .ant-select {
+      .ant-select-selector {
+        border-radius: 6px;
+      }
+    }
+    .ant-form-item {
+      margin-bottom: 16px;
+    }
+  }
+}
+.fields {
+  display: flex;
+  align-items: center;
+}

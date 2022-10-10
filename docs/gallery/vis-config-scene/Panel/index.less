@@ -1,0 +1,34 @@
+.collapse {
+  :global {
+    .ant-collapse-header {
+      padding: 10px 0 0 0;
+    }
+  }
+}
+
+.panel {
+  display: flex;
+  &-maplayer {
+    z-index: 1000;
+    width: 220px;
+    color: #333;
+    background: #f4f5f7;
+    &-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 8px 0 8px;
+      &-popconfirm {
+        :global {
+          .ant-popover-arrow {
+            display: none;
+          }
+          .ant-popover-inner {
+            margin-top: -10px;
+            margin-left: -6px;
+          }
+        }
+      }
+    }
+  }
+}

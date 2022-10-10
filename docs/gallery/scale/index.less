@@ -1,13 +1,5 @@
-.legend {
-  max-height: 300px;
-  // background: #fff;
-  padding: 3px;
-  overflow-y: scroll;
-  border-radius: 2px;
-}
-
 .continuity {
-  width: 150px;
+  width: 15px;
   height: 10px;
 }
 
@@ -17,18 +9,35 @@
   justify-content: space-between;
 }
 
-.flexCenter {
+.center {
   display: flex;
   align-items: center;
 }
 
-.legendColor {
-  width: 30px;
-  height: 10px;
-  border: 1px solid #fff;
+.threshold {
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: 0 0 10px 8px #f1f1f1;
+  &-color {
+    width: 30px;
+    height: 15px;
+    border: 1px solid #fff;
+  }
+  &-labels {
+    display: flex;
+    align-items: center;
+    margin-top: 4px;
+    &-item {
+      position: relative;
+      right: -5px;
+      text-align: end;
+    }
+  }
 }
 
-.legendValue {
-  width: 30px;
-  text-align: end;
+.legend {
+  padding: 8px 10px;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 0 10px 8px #f1f1f1;
 }

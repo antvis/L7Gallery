@@ -32,6 +32,7 @@ function StreetMap() {
       trackStyle: { backgroundColor: get(heatmapCfgs, 'color.value[0]') },
     };
   }, [heatmapCfgs]);
+  console.log('heatmapCfgs', heatmapCfgs);
 
   return (
     <LarkMap
@@ -43,13 +44,14 @@ function StreetMap() {
         zoom: 14,
         pitch: 30,
       }}
-      onSceneLoaded={(s) => setScene(s)}
+      onSceneLoaded={(s: Scene) => setScene(s)}
     >
       {heatmapData && (
         // @ts-ignore
         <HeatmapLayer
-          size={{ field: 'sum', value: (v) => v.sum }}
+          size={{ field: 'sum', value: (v: any) => v.sum }}
           {...heatmapCfgs}
+          // shape={"circle"}
           source={{
             ...heatmapCfgs.source,
             data: heatmapData,

@@ -2,7 +2,7 @@ import { LarkMap, PolygonLayer, Popup, PopupProps, Scale, Zoom } from '@antv/lar
 import type { PolygonLayerProps, LarkMapProps } from '@antv/larkmap';
 import React, { useEffect, useState } from 'react';
 import styles from './index.less';
-import { ILngLat } from '@antv/l7';
+import { ILngLat, Scene } from '@antv/l7';
 
 const CountyUnemployment = () => {
   const [lngLat, setLngLat] = useState<ILngLat>();
@@ -69,7 +69,7 @@ const CountyUnemployment = () => {
       parser: { type: 'geojson' },
     },
     onCreated: (layer) => {
-      layer?.on('mouseenter', enterFunction);
+      layer?.on('click', enterFunction);
     },
   };
 

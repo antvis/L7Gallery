@@ -11,7 +11,7 @@ import React, { useEffect, useState } from 'react';
 import { polygon } from '@turf/turf';
 
 export default () => {
-  const [PonitData, setPointData] = useState({
+  const [PointData, setPointData] = useState({
     data: [],
     parser: { type: 'json', x: 'center_lon', y: 'center_lat' },
   });
@@ -50,11 +50,11 @@ export default () => {
   useEffect(() => {
     fetch('https://gw.alipayobjects.com/os/bmw-prod/2dfb73f7-df5a-46e5-9037-846c481d9e45.json')
       .then((res) => res.json())
-      .then((data) => setPointData({ ...PonitData, data }));
+      .then((data) => setPointData({ ...PointData, data }));
   }, []);
 
   useEffect(() => {
-    const pointList = PonitData.data.map((item: any) => {
+    const pointList = PointData.data.map((item: any) => {
       return [+item.center_lon, +item.center_lat];
     });
     const ponintFilter = pointList.filter((item) => {
@@ -71,7 +71,7 @@ export default () => {
       return polygon([item]);
     });
     setPolygonData({ ...polygonData, features: polygonDatas });
-  }, [PonitData]);
+  }, [PointData]);
 
   const layerOption = {
     autoFit: true,
@@ -87,7 +87,7 @@ export default () => {
 
   return (
     <LarkMap {...(config as LarkMapProps)} style={{ height: '700px' }}>
-      <PointLayer {...(layerOptions as unknown as PointLayerProps)} source={PonitData} />
+      <PointLayer {...(layerOptions as unknown as PointLayerProps)} source={PointData} />
       <ChoroplethLayer
         {...(layerOption as unknown as ChoroplethLayerProps)}
         source={{ data: polygonData, parser: { type: 'geojson' } }}

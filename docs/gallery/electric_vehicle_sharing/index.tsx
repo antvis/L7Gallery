@@ -34,53 +34,56 @@ export default () => {
   const config = {
     mapType: 'GaodeV2',
     mapOptions: {
-      // center: [120.210792, 30.246026],
-      // zoom: 0,
+      center: [120.1514132, 30.2725324],
+      zoom: 0,
     },
   };
 
-  const fetchPointData = async () => {
-    const res = await fetch(
-      'https://gw.alipayobjects.com/os/bmw-prod/b75db584-b143-491d-83cc-cb45653cd4ed.json',
-    );
-    const result = await res.json();
-    setPointData({ ...pointData, data: result });
-  };
-
-  const fetchPolygonData = async () => {
-    const res = await fetch(
-      'https://gw.alipayobjects.com/os/bmw-prod/163c9fbb-546f-407e-beb1-cc48fdfc2613.json',
-    );
-    const result = await res.json();
-
-    setPolygonData({ ...PolygonData, data: result });
-  };
-
   useEffect(() => {
-    // fetchPointData();
-    // fetchPolygonData();
     setPointData({ ...pointData, data: pointbike });
     setPolygonData({ ...PolygonData, data: pointZone });
   }, []);
 
   const onChangeType = (e: string) => {
     setSelectType(e);
-    // 停车地点进行筛选数据
-    const newPoint = pointbike?.features?.filter((item) => {
-      if (item.properties[e]) {
-        return item;
-      }
-    });
+    if (e === SELECT_TYPE.ALL) {
+      setPointData({ ...pointData, data: pointbike });
+      setPolygonData({ ...PolygonData, data: pointZone });
+    } else if (![SELECT_TYPE.POINTZONELESS, SELECT_TYPE.POINTZONEMORE].includes(e)) {
+      // 停车地点进行筛选数据
+      const newPoint = pointbike?.features?.filter((item) => {
+        if (item.properties[e]) {
+          return item;
+        }
+      });
+      const newdata = {
+        ...pointData,
+        data: { type: 'FeatureCollection', features: newPoint },
+      };
+      setPointData({ ...newdata });
+    } else {
+      // 区域数据的筛选
+      const newZone = pointZone.features.filter((item) => {
+        // 少
+        if (e === SELECT_TYPE.POINTZONELESS) {
+          if (item.properties.bikeNumber < 5) {
+            return item;
+          }
+        } else {
+          if (item.properties.bikeNumber >= 5) {
+            return item;
+          }
+        }
+      });
 
-    const newdata = {
-      ...pointData,
-      data: { type: 'FeatureCollection', features: newPoint },
-    };
+      const newdata = {
+        ...PolygonData,
+        data: { type: 'FeatureCollection', features: newZone },
+      };
 
-    setPointData({ ...newdata });
+      setPolygonData({ ...newdata });
+    }
   };
-
-  console.log(pointData, '更新筛选数据显示条件');
 
   return (
     <LarkMap

@@ -7,9 +7,16 @@ import {
   ChoroplethLayer,
   ChoroplethLayerProps,
 } from '@antv/larkmap';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Tabs, Collapse } from 'antd';
-import { tabList, pointLayerStyle, choroplethLayerStyle, SELECT_TYPE } from './contents';
+import {
+  tabList,
+  pointLayerStyle,
+  pointunAbleLayerStyle,
+  pointDefaultLayerStyle,
+  choroplethLayerStyle,
+  SELECT_TYPE,
+} from './contents';
 import styles from './index.module.less';
 import { pointZone } from './mock/pointZone';
 import { pointbike } from './mock/pointbike';
@@ -18,6 +25,15 @@ const { Panel } = Collapse;
 
 export default () => {
   const [pointData, setPointData] = useState({
+    data: {},
+    parser: { type: 'geojson' },
+    cluster: true,
+    clusterOption: {
+      radius: 5,
+    },
+  });
+
+  const [pointSelectData, setSelectPointData] = useState({
     data: {},
     parser: { type: 'geojson' },
     cluster: true,
@@ -34,7 +50,7 @@ export default () => {
   const config = {
     mapType: 'GaodeV2',
     mapOptions: {
-      center: [120.1514132, 30.2725324],
+      center: [120.1492458, 30.2724425],
       zoom: 0,
     },
   };
@@ -60,7 +76,7 @@ export default () => {
         ...pointData,
         data: { type: 'FeatureCollection', features: newPoint },
       };
-      setPointData({ ...newdata });
+      setSelectPointData({ ...newdata });
     } else {
       // 区域数据的筛选
       const newZone = pointZone.features.filter((item) => {
@@ -85,6 +101,20 @@ export default () => {
     }
   };
 
+  const pointStletype = useMemo(() => {
+    switch (selectType) {
+      case SELECT_TYPE.BICKILLEGALPARKING:
+      case SELECT_TYPE.BIKEAVAILABILITY:
+        return pointunAbleLayerStyle;
+      case SELECT_TYPE.BIKEUNAVAILABILITY:
+      case SELECT_TYPE.BICKLOWERPOWER:
+      case SELECT_TYPE.BICKTHEFAULT:
+        return pointDefaultLayerStyle;
+      default:
+        return pointLayerStyle;
+    }
+  }, [selectType]);
+
   return (
     <LarkMap
       {...(config as LarkMapProps)}
@@ -106,12 +136,18 @@ export default () => {
       <CustomControl className={styles['electric_vehicle_sharing-left']} position="topleft">
         <Collapse defaultActiveKey={['1']} bordered={false} expandIconPosition="end">
           <Panel header="杭州市共享电单车分布情况" key="1">
-            <p>dfkgdfklgdfj</p>
+            某某地点，共有电动自行车{pointZone.total}
+            辆，其中低电量{pointbike.bikeLowpowerTotal}
+            辆，故障车{pointbike.bikeTheFaultTotal}辆，违章停车{pointbike.bikeIllegalParking}辆，有
+            720处停放点处于车辆过多情况， 166停放点处理车辆过少情况
           </Panel>
         </Collapse>
       </CustomControl>
-
+      {/* 平常 */}
       <PointLayer {...(pointLayerStyle as unknown as PointLayerProps)} source={pointData} />
+      {/* 故障 */}
+      <PointLayer {...(pointStletype as unknown as PointLayerProps)} source={pointSelectData} />
+
       {/* 区域图层数据 */}
       <ChoroplethLayer
         {...(choroplethLayerStyle as unknown as ChoroplethLayerProps)}

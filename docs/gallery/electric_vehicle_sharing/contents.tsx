@@ -256,7 +256,19 @@ export const tabList = [
 export const pointLayerStyle = {
   autoFit: true,
   shape: 'circle',
-  color: 'blue',
+  color: ' #4F93EA',
+};
+// 不可用,违规 ,电量低
+export const pointunAbleLayerStyle = {
+  autoFit: true,
+  shape: 'circle',
+  color: '#91C25B',
+};
+// 故障
+export const pointDefaultLayerStyle = {
+  autoFit: true,
+  shape: 'circle',
+  color: '#F5684A',
 };
 
 export const choroplethLayerStyle = {

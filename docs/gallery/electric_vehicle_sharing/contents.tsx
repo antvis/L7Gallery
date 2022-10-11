@@ -238,9 +238,9 @@ export const tabList = [
           电量低的车辆
         </li>
         <li
-          onClick={() => onChangeType(SELECT_TYPE.POINTZONELESS)}
+          onClick={() => onChangeType(SELECT_TYPE.BICKTHEFAULT)}
           className={
-            selectType === SELECT_TYPE.POINTZONELESS
+            selectType === SELECT_TYPE.BICKTHEFAULT
               ? styles['electric_vehicle_sharing_selected-item']
               : ''
           }
@@ -260,6 +260,7 @@ export const pointLayerStyle = {
 };
 
 export const choroplethLayerStyle = {
+  autoFit: true,
   opacity: 0.3,
   strokeColor: 'blue',
   lineWidth: 1,

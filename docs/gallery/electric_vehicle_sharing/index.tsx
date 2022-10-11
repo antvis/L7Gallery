@@ -11,12 +11,14 @@ import React, { useEffect, useState } from 'react';
 import { Tabs, Collapse } from 'antd';
 import { tabList, pointLayerStyle, choroplethLayerStyle, SELECT_TYPE } from './contents';
 import styles from './index.module.less';
+import { pointZone } from './mock/pointZone';
+import { pointbike } from './mock/pointbike';
 
 const { Panel } = Collapse;
 
 export default () => {
   const [pointData, setPointData] = useState({
-    data: [],
+    data: {},
     parser: { type: 'geojson' },
     cluster: true,
     clusterOption: {
@@ -24,7 +26,7 @@ export default () => {
     },
   });
   const [PolygonData, setPolygonData] = useState({
-    data: [],
+    data: {},
     parser: { type: 'geojson' },
   });
 
@@ -32,8 +34,8 @@ export default () => {
   const config = {
     mapType: 'GaodeV2',
     mapOptions: {
-      center: [120.210792, 30.246026],
-      zoom: 0,
+      // center: [120.210792, 30.246026],
+      // zoom: 0,
     },
   };
 
@@ -50,19 +52,35 @@ export default () => {
       'https://gw.alipayobjects.com/os/bmw-prod/163c9fbb-546f-407e-beb1-cc48fdfc2613.json',
     );
     const result = await res.json();
+
     setPolygonData({ ...PolygonData, data: result });
   };
 
   useEffect(() => {
-    fetchPointData();
-    fetchPolygonData();
+    // fetchPointData();
+    // fetchPolygonData();
+    setPointData({ ...pointData, data: pointbike });
+    setPolygonData({ ...PolygonData, data: pointZone });
   }, []);
 
   const onChangeType = (e: string) => {
     setSelectType(e);
+    // 停车地点进行筛选数据
+    const newPoint = pointbike?.features?.filter((item) => {
+      if (item.properties[e]) {
+        return item;
+      }
+    });
+
+    const newdata = {
+      ...pointData,
+      data: { type: 'FeatureCollection', features: newPoint },
+    };
+
+    setPointData({ ...newdata });
   };
 
-  console.log(selectType);
+  console.log(pointData, '更新筛选数据显示条件');
 
   return (
     <LarkMap

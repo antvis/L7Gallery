@@ -46,7 +46,11 @@ export default () => {
     parser: { type: 'geojson' },
   });
 
+  // 类别选择
   const [selectType, setSelectType] = useState<string>();
+  // 子项选择
+  const [selectItem, setSelectItem] = useState<string>();
+
   const config = {
     mapType: 'GaodeV2',
     mapOptions: {
@@ -65,7 +69,24 @@ export default () => {
     if (e === SELECT_TYPE.ALL) {
       setPointData({ ...pointData, data: pointbike });
       setPolygonData({ ...PolygonData, data: pointZone });
-    } else if (![SELECT_TYPE.POINTZONELESS, SELECT_TYPE.POINTZONEMORE].includes(e)) {
+    } else {
+      const newPoint = pointbike?.features?.filter((item) => {
+        if (item.properties[e]) {
+          return item;
+        }
+      });
+      const newdata = {
+        ...pointData,
+        data: { type: 'FeatureCollection', features: newPoint },
+      };
+      setPointData({ ...newdata });
+    }
+  };
+
+  const onChangeItem = (e: string) => {
+    setSelectItem(e);
+    //子筛选项数据
+    if (![SELECT_TYPE.POINTZONELESS, SELECT_TYPE.POINTZONEMORE].includes(e)) {
       // 停车地点进行筛选数据
       const newPoint = pointbike?.features?.filter((item) => {
         if (item.properties[e]) {
@@ -101,8 +122,22 @@ export default () => {
     }
   };
 
-  const pointStletype = useMemo(() => {
+  // 样式type
+  const pointStyleType = useMemo(() => {
     switch (selectType) {
+      case SELECT_TYPE.ALL:
+      case SELECT_TYPE.BIKEAVAILABILITY:
+        return pointunAbleLayerStyle;
+      case SELECT_TYPE.BIKEUNAVAILABILITY:
+        return pointDefaultLayerStyle;
+      default:
+        return pointLayerStyle;
+    }
+  }, [selectType]);
+
+  // 子项样式
+  const pointStleItemtype = useMemo(() => {
+    switch (selectItem) {
       case SELECT_TYPE.BICKILLEGALPARKING:
       case SELECT_TYPE.BIKEAVAILABILITY:
         return pointunAbleLayerStyle;
@@ -113,7 +148,7 @@ export default () => {
       default:
         return pointLayerStyle;
     }
-  }, [selectType]);
+  }, [selectItem]);
 
   return (
     <LarkMap
@@ -126,7 +161,7 @@ export default () => {
           {tabList.map((item) => {
             return (
               <Tabs.TabPane tab={item.label} key={item.key}>
-                {item.children(onChangeType, selectType)}
+                {item.children(onChangeItem, selectItem)}
               </Tabs.TabPane>
             );
           })}
@@ -144,9 +179,9 @@ export default () => {
         </Collapse>
       </CustomControl>
       {/* 平常 */}
-      <PointLayer {...(pointLayerStyle as unknown as PointLayerProps)} source={pointData} />
+      <PointLayer {...(pointStyleType as unknown as PointLayerProps)} source={pointData} />
       {/* 故障 */}
-      <PointLayer {...(pointStletype as unknown as PointLayerProps)} source={pointSelectData} />
+      <PointLayer {...(pointStleItemtype as unknown as PointLayerProps)} source={pointSelectData} />
 
       {/* 区域图层数据 */}
       <ChoroplethLayer

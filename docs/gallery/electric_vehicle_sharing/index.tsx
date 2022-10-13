@@ -7,13 +7,14 @@ import {
   ChoroplethLayer,
   ChoroplethLayerProps,
 } from '@antv/larkmap';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useRef } from 'react';
 import { Tabs, Collapse } from 'antd';
 import {
   tabList,
   pointLayerStyle,
-  pointunAbleLayerStyle,
-  pointDefaultLayerStyle,
+  pointAbleStyle,
+  pointSelectedStyle,
+  pointDisAbleStyle,
   choroplethLayerStyle,
   SELECT_TYPE,
 } from './contents';
@@ -81,6 +82,14 @@ export default () => {
       };
       setPointData({ ...newdata });
     }
+    setSelectPointData({
+      data: {},
+      parser: { type: 'geojson' },
+      cluster: true,
+      clusterOption: {
+        radius: 5,
+      },
+    });
   };
 
   const onChangeItem = (e: string) => {
@@ -122,33 +131,18 @@ export default () => {
     }
   };
 
-  // 样式type
   const pointStyleType = useMemo(() => {
     switch (selectType) {
       case SELECT_TYPE.ALL:
+        return pointLayerStyle;
       case SELECT_TYPE.BIKEAVAILABILITY:
-        return pointunAbleLayerStyle;
+        return pointAbleStyle;
       case SELECT_TYPE.BIKEUNAVAILABILITY:
-        return pointDefaultLayerStyle;
+        return pointDisAbleStyle;
       default:
         return pointLayerStyle;
     }
   }, [selectType]);
-
-  // 子项样式
-  const pointStleItemtype = useMemo(() => {
-    switch (selectItem) {
-      case SELECT_TYPE.BICKILLEGALPARKING:
-      case SELECT_TYPE.BIKEAVAILABILITY:
-        return pointunAbleLayerStyle;
-      case SELECT_TYPE.BIKEUNAVAILABILITY:
-      case SELECT_TYPE.BICKLOWERPOWER:
-      case SELECT_TYPE.BICKTHEFAULT:
-        return pointDefaultLayerStyle;
-      default:
-        return pointLayerStyle;
-    }
-  }, [selectItem]);
 
   return (
     <LarkMap
@@ -178,10 +172,13 @@ export default () => {
           </Panel>
         </Collapse>
       </CustomControl>
-      {/* 平常 */}
+      {/* 总量 */}
       <PointLayer {...(pointStyleType as unknown as PointLayerProps)} source={pointData} />
-      {/* 故障 */}
-      <PointLayer {...(pointStleItemtype as unknown as PointLayerProps)} source={pointSelectData} />
+      {/* 选中单项数据 */}
+      <PointLayer
+        {...(pointSelectedStyle as unknown as PointLayerProps)}
+        source={pointSelectData}
+      />
 
       {/* 区域图层数据 */}
       <ChoroplethLayer

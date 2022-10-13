@@ -253,22 +253,30 @@ export const tabList = [
   },
 ];
 
+// default 状态
 export const pointLayerStyle = {
   autoFit: true,
   shape: 'circle',
   color: ' #4F93EA',
 };
-// 不可用,违规 ,电量低
-export const pointunAbleLayerStyle = {
+// 可用状态
+export const pointAbleStyle = {
   autoFit: true,
   shape: 'circle',
   color: '#91C25B',
 };
-// 故障
-export const pointDefaultLayerStyle = {
+
+// 不可用状态
+export const pointDisAbleStyle = {
   autoFit: true,
   shape: 'circle',
   color: '#F5684A',
+};
+//选中状态
+export const pointSelectedStyle = {
+  autoFit: true,
+  shape: 'circle',
+  color: '#FFD700',
 };
 
 export const choroplethLayerStyle = {

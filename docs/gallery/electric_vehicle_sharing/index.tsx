@@ -6,8 +6,9 @@ import {
   PointLayerProps,
   ChoroplethLayer,
   ChoroplethLayerProps,
+  ZoomControl,
 } from '@antv/larkmap';
-import React, { useEffect, useMemo, useState, useRef } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Tabs, Collapse } from 'antd';
 import {
   tabList,
@@ -23,6 +24,14 @@ import { pointZone } from './mock/pointZone';
 import { pointbike } from './mock/pointbike';
 
 const { Panel } = Collapse;
+
+const config = {
+  mapType: 'GaodeV2',
+  mapOptions: {
+    center: [120.1492458, 30.2724425],
+    zoom: 0,
+  },
+};
 
 export default () => {
   const [pointData, setPointData] = useState({
@@ -42,6 +51,7 @@ export default () => {
       radius: 5,
     },
   });
+
   const [PolygonData, setPolygonData] = useState({
     data: {},
     parser: { type: 'geojson' },
@@ -51,14 +61,6 @@ export default () => {
   const [selectType, setSelectType] = useState<string>();
   // 子项选择
   const [selectItem, setSelectItem] = useState<string>();
-
-  const config = {
-    mapType: 'GaodeV2',
-    mapOptions: {
-      center: [120.1492458, 30.2724425],
-      zoom: 0,
-    },
-  };
 
   useEffect(() => {
     setPointData({ ...pointData, data: pointbike });
@@ -150,6 +152,7 @@ export default () => {
       className={styles['electric_vehicle_sharing']}
       style={{ height: '700px' }}
     >
+      <ZoomControl position="bottomright" />
       <CustomControl className={styles['electric_vehicle_sharing-right']} position="topright">
         <Tabs onChange={onChangeType}>
           {tabList.map((item) => {
@@ -172,8 +175,10 @@ export default () => {
           </Panel>
         </Collapse>
       </CustomControl>
+
       {/* 总量 */}
       <PointLayer {...(pointStyleType as unknown as PointLayerProps)} source={pointData} />
+
       {/* 选中单项数据 */}
       <PointLayer
         {...(pointSelectedStyle as unknown as PointLayerProps)}

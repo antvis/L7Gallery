@@ -1,5 +1,6 @@
 import type { LarkMapProps, LineLayerProps } from '@antv/larkmap';
 import { LarkMap, LineLayer } from '@antv/larkmap';
+import { GaodeMap } from '@antv/l7-maps';
 // import type { Scene } from '@antv/l7';
 import React, { useEffect, useMemo, useState } from 'react';
 
@@ -47,13 +48,13 @@ const SfContour = () => {
   const larkMapConfig: LarkMapProps = useMemo(() => {
     return {
       mapType: 'GaodeV2',
-      mapOptions: {
-        style: 'dark',
+      map: new GaodeMap({
+        style: 'amap://styles/darkblue',
         pitch: 42,
         zoom: 12.3,
         center: [-122.448088, 37.742107],
         rotation: -30, // 初始旋转角度
-      },
+      }),
       style: {
         height: 700,
       },

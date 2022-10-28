@@ -7,11 +7,43 @@ order: 19
 
 ## 19.Scale
 
-## yzg
+## demo 展示 yzg
 
-## 示例
+### cat
 
-<code src= './scale/index.tsx'>
+<code src= './scale/cat.tsx'>
+
+### linear
+
+<code src= './scale/linear.tsx'>
+
+### log
+
+<code src= './scale/log.tsx'>
+
+### power
+
+<code src= './scale/power.tsx'>
+
+### divering
+
+<code src= './scale/diverging.tsx'>
+
+### sequential
+
+<code src= './scale/sequential.tsx'>
+
+### threshold
+
+<code src= './scale/threshold.tsx'>
+
+### quantile
+
+<code src= './scale/quantile.tsx'>
+
+### quantize
+
+<code src= './scale/quantize.tsx'>
 
 ## Scale 简介
 

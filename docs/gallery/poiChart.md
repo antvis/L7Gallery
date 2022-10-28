@@ -2,10 +2,10 @@
 nav:
   title: 图库
   path: /gallery
-order: 21
+order: 23
 ---
 
-## 21.poi 聚合图
+## 23.poi 聚合图
 
 ### [author by gaoxuebo](https://github.com/gaoxuebo)
 

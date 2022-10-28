@@ -1,0 +1,49 @@
+.electric_vehicle_sharing {
+  &-right {
+    width: 310px;
+    padding: 10px;
+    overflow: hidden;
+    background: #fff;
+    border-radius: 4px;
+    li {
+      display: flex;
+      align-items: center;
+      height: 40px;
+      padding: 0px 5px;
+      line-height: 40px;
+      vertical-align: center;
+      border-radius: 4px;
+      cursor: pointer;
+      span {
+        margin-right: 5px;
+      }
+    }
+    li:hover {
+      color: rgb(24, 144, 255);
+      svg {
+        color: rgb(24, 144, 255);
+      }
+    }
+  }
+  &-left {
+    width: 350px;
+    overflow: hidden;
+    background: #fff;
+    border-radius: 4px;
+    &-title {
+      height: 35px;
+      border-bottom: 1px dotted rgb(193, 192, 192);
+      span {
+        margin-left: 5px;
+      }
+    }
+  }
+}
+
+.electric_vehicle_sharing_selected-item {
+  color: rgb(24, 144, 255);
+  background: rgba(24, 144, 255, 0.1);
+  svg {
+    color: rgb(24, 144, 255);
+  }
+}

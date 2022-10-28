@@ -33,10 +33,10 @@ const MyComponent = () => {
       id: 'textOnelayer',
       field: 'n',
       style: {
-        fill: 'blue',
+        fill: 'rgb(41, 50, 60)',
         opacity: 1,
         fontSize: 14,
-        stroke: '#fff',
+        stroke: 'rgb(240, 240, 240)',
         strokeWidth: 2,
         textAllowOverlap: false,
         padding: [5, 5],

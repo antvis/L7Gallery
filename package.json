@@ -30,10 +30,12 @@
     ]
   },
   "dependencies": {
+    "@alipay/tech-ui": "^2.29.0",
     "@ant-design/icons": "^4.7.0",
+    "@antv/g2plot": "^2.4.19",
     "@antv/l7": "^2.9.21",
     "@antv/l7-maps": "^2.9.21",
-    "@antv/larkmap": "^0.3.0",
+    "@antv/larkmap": "^0.4.2",
     "@turf/turf": "^6.5.0",
     "antd": "^4.23.2",
     "color": "^4.2.3",

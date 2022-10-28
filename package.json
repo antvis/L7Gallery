@@ -30,12 +30,17 @@
     ]
   },
   "dependencies": {
+    "@alipay/tech-ui": "^2.29.0",
+    "@ant-design/icons": "^4.7.0",
+    "@antv/g2plot": "^2.4.19",
     "@antv/l7": "^2.9.21",
     "@antv/l7-maps": "^2.9.21",
     "@antv/larkmap": "^0.4.2",
     "@turf/turf": "^6.5.0",
     "antd": "^4.22.6",
     "h3-js": "^4.0.0",
+    "lodash": "^4.17.21",
+    "mockjs": "^1.1.0",
     "popmotion": "9.4.2",
     "react": "^18.0.0",
     "react-color": "^2.19.3",

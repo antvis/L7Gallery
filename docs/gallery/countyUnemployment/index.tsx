@@ -31,9 +31,9 @@ const CountyUnemployment = () => {
   /** 地图属性配置 */
   const config: LarkMapProps = useMemo(() => {
     return {
-      mapType: 'Mapbox',
+      mapType: 'GaodeV2',
       mapOptions: {
-        style: 'light',
+        style: 'dark',
         pitch: 0,
         zoom: 3.7,
         center: [-97.39054553110171, 39.448335349067435],
@@ -45,7 +45,7 @@ const CountyUnemployment = () => {
     };
   }, [data]);
 
-  const enterFn = (featureInfo: any) => {
+  const moveFn = (featureInfo: any) => {
     setLngLat(featureInfo.lngLat);
     setPopINfo({
       NAME: featureInfo.feature.properties.NAME,
@@ -54,6 +54,10 @@ const CountyUnemployment = () => {
       LSAD: featureInfo.feature.properties.LSAD,
       AWATER: featureInfo.feature.properties.AWATER,
     });
+  };
+  const outFn = () => {
+    setLngLat({} as ILngLat);
+    setPopINfo({});
   };
 
   /** 区域图层属性配置 */
@@ -86,20 +90,23 @@ const CountyUnemployment = () => {
         parser: { type: 'geojson' },
       },
       onCreated: (layer) => {
-        layer?.on('mouseenter', enterFn);
+        layer?.on('mousemove', moveFn);
+        layer?.on('mouseout', outFn);
       },
       blend: 'normal',
     };
   }, [data, colorArr]);
   /** 信息框属性配置 */
   const popupProps: PopupProps = useMemo(() => {
-    return {
-      className: styles['popup-area'],
-      lngLat: lngLat,
-      closeButton: false,
-      closeOnClick: false,
-      anchor: 'bottom',
-    };
+    return Object.keys(lngLat)?.length
+      ? {
+          className: styles['popup-area'],
+          lngLat: lngLat,
+          closeButton: false,
+          closeOnClick: false,
+          anchor: 'bottom',
+        }
+      : ({} as PopupProps);
   }, [lngLat]);
 
   useEffect(() => {
@@ -115,21 +122,23 @@ const CountyUnemployment = () => {
       {/* 区域图层 */}
       <ChoroplethLayer {...choroplethOptions} />
       {/* 信息框 */}
-      <Popup {...popupProps}>
-        <div>
-          <div className={styles['title-area']}>Counties-Unemployment</div>
-          <ul className={styles['ul-style']}>
-            {Object.keys(popInfo)?.map((key: string, index: number) => {
-              return (
-                <li key={key}>
-                  <div>{key}</div>
-                  <div>{Object.values(popInfo)[index]}</div>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      </Popup>
+      {Object.keys(popInfo)?.length && (
+        <Popup {...popupProps}>
+          <div>
+            <div className={styles['title-area']}>Counties-Unemployment</div>
+            <ul className={styles['ul-style']}>
+              {Object.keys(popInfo)?.map((key: string, index: number) => {
+                return (
+                  <li key={key}>
+                    <div>{key}</div>
+                    <div>{Object.values(popInfo)[index]}</div>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        </Popup>
+      )}
       {/* 比例尺控件 */}
       <Scale position={'bottomleft'} />
       {/* 缩放器控件 */}

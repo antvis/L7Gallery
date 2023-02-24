@@ -1,3 +1,6 @@
+/**
+ * inline: true
+ */
 import { CopyOutlined, DownloadOutlined } from '@ant-design/icons';
 import type { LayerPopupProps } from '@antv/larkmap';
 import {
@@ -232,141 +235,171 @@ export default () => {
   };
 
   return (
-    <Spin spinning={panelData.loading}>
-      <div style={{ display: 'flex' }}>
-        <LarkMap
-          {...config}
-          style={{ height: '90vh', width: 'calc(100% - 300px)' }}
+    <div
+      style={{
+        position: 'absolute',
+        width: '100%',
+        left: 0,
+        top: '60px',
+        background: 'rgba(247, 249, 251, 0.9)',
+        height: 'calc(100% - 160px)',
+        overflow: 'hidden',
+        zIndex: 100,
+        padding: '48px 48px',
+      }}
+    >
+      <Spin spinning={panelData.loading}>
+        <div
+          style={{
+            display: 'flex',
+            width: 'calc(100% - 180px)',
+            padding: '25px',
+            background: '#fff',
+            borderRadius: '10px',
+            boxShadow: '0 8px 24px 0 rgb(0 0 0 / 5%',
+          }}
         >
-          <ChoroplethLayer
-            {...layerOptions}
-            source={layerSource}
-            onDblClick={onDblClick}
-            onUndblclick={onUndblclick}
-            onClick={onLayerClick}
-            id="myChoroplethLayer"
-          />
-          <LayerPopup
-            closeButton={false}
-            closeOnClick={false}
-            anchor="bottom-left"
-            trigger="hover"
-            items={items}
-          />
-          <MapThemeControl position="topleft" />
-          <CustomControl
-            position="bottomleft"
-            className="custom-control-class"
+          <LarkMap
+            {...config}
             style={{
-              background: '#fff',
-              borderRadius: 4,
-              overflow: 'hidden',
-              padding: 16,
+              height: 'calc(100vh - 180px)',
+              width: 'calc(100% - 300px)',
             }}
           >
-            <div>下钻: 双击要下钻的区域</div>
-            <div>下卷: 双击要上卷的区域</div>
-          </CustomControl>
-        </LarkMap>
-        <div className="panel">
-          <div className="source-select">
-            <div className="source-flex">
-              <div>数据源：</div>
-              <Select
-                value={sourceType}
-                style={{ width: 140 }}
-                onChange={setSourceType}
-                options={sourceOptions}
-              />
+            <ChoroplethLayer
+              {...layerOptions}
+              source={layerSource}
+              onDblClick={onDblClick}
+              onUndblclick={onUndblclick}
+              onClick={onLayerClick}
+              id="myChoroplethLayer"
+            />
+            <LayerPopup
+              closeButton={false}
+              closeOnClick={false}
+              anchor="bottom-left"
+              trigger="hover"
+              items={items}
+            />
+            <MapThemeControl position="topleft" />
+            <CustomControl
+              position="bottomleft"
+              className="custom-control-class"
+              style={{
+                background: '#fff',
+                borderRadius: 4,
+                overflow: 'hidden',
+                padding: 16,
+              }}
+            >
+              <div>下钻: 双击要下钻的区域</div>
+              <div>下卷: 双击要上卷的区域</div>
+            </CustomControl>
+          </LarkMap>
+          <div className="panel">
+            <div className="source-select">
+              <div className="source-flex">
+                <div>数据源：</div>
+                <Select
+                  value={sourceType}
+                  style={{ width: 140 }}
+                  onChange={setSourceType}
+                  options={sourceOptions}
+                />
+              </div>
+              <div className="source-flex">
+                <div>版本号：</div>
+                <Select
+                  value={sourceEdition}
+                  style={{ width: 140 }}
+                  onChange={onSourceEdition}
+                  options={editionOptions[sourceType]}
+                />
+              </div>
+              <div className="infoText">选择切换不同的数据源和版本号</div>
             </div>
-            <div className="source-flex">
-              <div>版本号：</div>
-              <Select
-                value={sourceEdition}
-                style={{ width: 140 }}
-                onChange={onSourceEdition}
-                options={editionOptions[sourceType]}
-              />
-            </div>
-            <div className="infoText">选择切换不同的数据源和版本号</div>
-          </div>
 
-          <Collapse
-            defaultActiveKey={['1']}
-            ghost
-            style={{ paddingTop: '12px' }}
-          >
-            <Panel header="下载选中数据" key="1">
-              {sourceType === 'L7Source' && (
-                <div style={{ display: 'flex', marginBottom: 10 }}>
-                  <div>数据粒度选择：</div>
-                  <Checkbox.Group
-                    options={granularity}
-                    onChange={onCheckChange}
-                  />
-                </div>
-              )}
-              {panelData.clickData ? (
-                <>
-                  <div style={{ display: 'flex', marginBottom: 10 }}>
-                    <div>选中名称：</div>
-                    <div>{panelData.clickData.name}</div>
-                  </div>
-                  <div style={{ display: 'flex' }}>
-                    <div>选中城市编码：</div>
-                    <Popover content={'点击下载选中数据'}>
-                      <a onClick={clickDownload}>{panelData.clickData.code}</a>
-                    </Popover>
-                  </div>
-                </>
-              ) : (
-                <div className="infoText">暂无数据，请单击图层选择数据</div>
-              )}
-            </Panel>
-          </Collapse>
-
-          {sourceType === 'L7Source' && (
             <Collapse
               defaultActiveKey={['1']}
               ghost
-              style={{ paddingTop: '10px' }}
+              style={{ paddingTop: '12px' }}
             >
-              <Panel header="高级设置" key="1">
-                <div className="flexCenter">
-                  <div>数据精度：</div>
-                  <Select
-                    style={{ width: 120 }}
-                    value={accuracyValue}
-                    onChange={onAccuracyChange}
-                    options={accuracyOption}
-                  />
-                </div>
+              <Panel header="下载选中数据" key="1">
+                {sourceType === 'L7Source' && (
+                  <div style={{ display: 'flex', marginBottom: 10 }}>
+                    <div>数据粒度选择：</div>
+                    <Checkbox.Group
+                      options={granularity}
+                      onChange={onCheckChange}
+                    />
+                  </div>
+                )}
+                {panelData.clickData ? (
+                  <>
+                    <div style={{ display: 'flex', marginBottom: 10 }}>
+                      <div>选中名称：</div>
+                      <div>{panelData.clickData.name}</div>
+                    </div>
+                    <div style={{ display: 'flex' }}>
+                      <div>选中城市编码：</div>
+                      <Popover content={'点击下载选中数据'}>
+                        <a onClick={clickDownload}>
+                          {panelData.clickData.code}
+                        </a>
+                      </Popover>
+                    </div>
+                  </>
+                ) : (
+                  <div className="infoText">暂无数据，请单击图层选择数据</div>
+                )}
               </Panel>
             </Collapse>
-          )}
-          <div className="download-content">
-            <div style={{ marginRight: 10 }}>数据下载</div>
-            <div className="data-input">
-              <Popover content={'复制'}>
-                <Button onClick={() => copy(JSON.stringify(layerSource.data))}>
-                  <CopyOutlined />
-                </Button>
-              </Popover>
-              <Popover content={'下载当前层级全部数据'}>
-                <Button onClick={onDownload}>
-                  <DownloadOutlined />
-                </Button>
-              </Popover>
+
+            {sourceType === 'L7Source' && (
+              <Collapse
+                defaultActiveKey={['1']}
+                ghost
+                style={{ paddingTop: '10px' }}
+              >
+                <Panel header="高级设置" key="1">
+                  <div className="flexCenter">
+                    <div>数据精度：</div>
+                    <Select
+                      style={{ width: 120 }}
+                      value={accuracyValue}
+                      onChange={onAccuracyChange}
+                      options={accuracyOption}
+                    />
+                  </div>
+                </Panel>
+              </Collapse>
+            )}
+            <div className="download-content">
+              <div style={{ marginRight: 10 }}>数据下载</div>
+              <div className="data-input">
+                <Popover content={'复制'}>
+                  <Button
+                    onClick={() => copy(JSON.stringify(layerSource.data))}
+                  >
+                    <CopyOutlined />
+                  </Button>
+                </Popover>
+                <Popover content={'下载当前层级全部数据'}>
+                  <Button onClick={onDownload}>
+                    <DownloadOutlined />
+                  </Button>
+                </Popover>
+              </div>
+            </div>
+            <div className="originData" style={{}}>
+              <div>数据来源：</div>
+              <a
+                href={`${dataSource?.info.desc.href}`}
+              >{`${dataSource?.info.desc.text}`}</a>
             </div>
           </div>
-          <div className="originData" style={{}}>
-            <div>数据来源：</div>
-            <a
-              href={`${dataSource?.info.desc.href}`}
-            >{`${dataSource?.info.desc.text}`}</a>
-          </div>
         </div>
-      </div>
-    </Spin>
+      </Spin>
+    </div>
   );
 };

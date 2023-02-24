@@ -3,7 +3,7 @@ import type {
   Geometry,
   GeometryCollection,
 } from '@turf/helpers';
-import { simplify } from '@turf/turf';
+import simplify from '@turf/simplify';
 import geobuf from 'geobuf';
 import Pbf from 'pbf';
 import type {

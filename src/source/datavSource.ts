@@ -40,7 +40,6 @@ export class DataVSource extends BaseSource {
     FeatureCollection<Geometry | GeometryCollection, Record<string, any>>
   > {
     const { code, full } = options;
-    console.log(full);
     const data = this.fetchData(code, full);
     return data;
   }

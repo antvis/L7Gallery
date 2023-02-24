@@ -1,6 +1,6 @@
 import type { ChoroplethLayerProps, LarkMapProps } from '@antv/larkmap';
 import { message } from 'antd';
-import type { BaseSource, DataLevel, DataPrecision } from 'district-data';
+import type { BaseSource, DataPrecision } from 'district-data';
 
 export const layerOptions: Omit<ChoroplethLayerProps, 'source'> = {
   autoFit: true,
@@ -23,19 +23,19 @@ export const config: LarkMapProps = {
   },
 };
 
-export const DrillingType = {
+export const DrillingType: Record<any, any> = {
   country: 'province',
   province: 'city',
   city: 'district',
 };
 
-const DrillingCode = {
+const DrillingCode: Record<any, any> = {
   province: '',
   city: '',
   district: 'code',
 };
 
-export const RollupType: Record<DataLevel, any> = {
+export const RollupType: Record<any, any> = {
   district: 'city',
   city: 'province',
   province: 'country',
@@ -44,12 +44,12 @@ export const RollupType: Record<DataLevel, any> = {
 };
 
 export const getDrillingData = async (
-  source: BaseSource,
+  areaLevel: any,
+  source?: BaseSource,
   code?: number,
   full?: boolean,
-  areaLevel?: DataLevel,
 ) => {
-  const data = await source.getChildrenData({
+  const data = await source?.getChildrenData({
     parentName: code,
     parentLevel: areaLevel,
     childrenLevel: DrillingType[areaLevel],
@@ -69,18 +69,13 @@ export const getDrillingData = async (
   };
 };
 
-export const gitRollupData = async (option: {
-  source: BaseSource;
-  code: number;
-  type: boolean;
-  areaLevel?: string;
-}) => {
+export const gitRollupData = async (option: any) => {
   const { source, code, type, areaLevel } = option;
   if (type) {
-    const fullData = await source.getData({ code: code, full: true });
-    const data = await source.getData({ code: code });
-    const dataCode = data.features[0].properties.parent.adcode;
-    const dataLevel = data.features[0].properties.level;
+    const fullData = await source?.getData({ code: code, full: true });
+    const data = await source?.getData({ code: code });
+    const dataCode = data?.features[0].properties.parent.adcode;
+    const dataLevel = data?.features[0].properties.level;
     if (typeof dataCode !== 'undefined') {
       return {
         geoJson: fullData,
@@ -91,12 +86,12 @@ export const gitRollupData = async (option: {
       if (dataCode === null) {
         return { geoJson: fullData, areaLevel: dataLevel, code: 100000 };
       } else {
-        const codeJson = JSON.parse(data.features[0].properties.parent).adcode;
+        const codeJson = JSON.parse(data?.features[0].properties.parent).adcode;
         return { geoJson: fullData, code: codeJson, areaLevel: dataLevel };
       }
     }
   }
-  const data = await source.getChildrenData({
+  const data = await source?.getChildrenData({
     parentName: code,
     parentLevel: RollupType[areaLevel],
     childrenLevel: RollupType[areaLevel],
@@ -118,12 +113,12 @@ export const gitRollupData = async (option: {
 };
 
 export const downloadData = async (
-  source: BaseSource,
   code: number,
   accuracy: DataPrecision,
-  areaLevel?: DataLevel,
+  source?: BaseSource,
+  areaLevel?: any,
 ) => {
-  const data = await source.getChildrenData({
+  const data = await source?.getChildrenData({
     parentName: code,
     parentLevel: areaLevel,
     childrenLevel: areaLevel,

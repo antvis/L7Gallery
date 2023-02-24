@@ -2,7 +2,6 @@ import { CopyOutlined, DownloadOutlined } from '@ant-design/icons';
 import type { LayerPopupProps } from '@antv/larkmap';
 import {
   ChoroplethLayer,
-  CustomControl,
   LarkMap,
   LayerPopup,
   MapThemeControl,
@@ -58,7 +57,7 @@ export default () => {
 
   const [dataSource, setDataSource] = useState<BaseSource>();
   const [accuracyValue, setAccuracyVAlue] = useState<DataPrecision>('low');
-  const [panelData, setPanelData] = useState({
+  const [panelData, setPanelData] = useState<any>({
     clickData: undefined,
     CheckValue: [],
     loading: false,
@@ -74,23 +73,27 @@ export default () => {
     const currentSource = new DataSourceMap[sourceType]({
       version: sourceEdition,
     });
-    setPanelData((v) => ({ ...v, loading: true }));
+    setPanelData((v: any) => ({ ...v, loading: true }));
     setDataSource(currentSource);
     // 初始化数据
     currentSource
       .getData({ level: 'country', code: 100000, full: true })
       .then((data) => {
-        setLayerSource((prevState) => ({
+        setLayerSource((prevState: any) => ({
           ...prevState,
           data,
         }));
-        setPanelData((v) => ({ ...v, loading: false, clickData: undefined }));
+        setPanelData((v: any) => ({
+          ...v,
+          loading: false,
+          clickData: undefined,
+        }));
       });
   }, [sourceType, sourceEdition]);
 
   // 下钻
   const onDblClick = async (e: any) => {
-    setPanelData((v) => ({ ...v, loading: true }));
+    setPanelData((v: any) => ({ ...v, loading: true }));
     if (adcode.level !== 'district') {
       const data = {
         DataVSource: {
@@ -101,7 +104,7 @@ export default () => {
             : undefined,
           full: adcode.level !== 'city' ? true : false,
         },
-        L7Source: {
+        RDBSource: {
           parentCode:
             e.feature.properties[`${RollupType[adcode.level]}_adcode`],
           full: undefined,
@@ -109,27 +112,30 @@ export default () => {
       };
       const code = e.feature.properties.adcode;
       const datas = await getDrillingData(
+        adcode.level,
         dataSource,
         code,
-        data[sourceType].full,
-        adcode.level,
+        data[sourceType]?.full,
       );
 
       const dataLevel = {
         DataVSource: e.feature.properties.level,
-        L7Source: datas.level,
+        RDBSource: datas.level,
       };
-      setLayerSource((prevState) => ({ ...prevState, data: datas.GeoJSON }));
+      setLayerSource((prevState: any) => ({
+        ...prevState,
+        data: datas.GeoJSON,
+      }));
       setAdcode((state) => ({
         ...state,
-        code: data[sourceType].parentCode,
+        code: data[sourceType]?.parentCode,
         adcode: code,
         level: dataLevel[sourceType],
       }));
     } else {
       message.info('已下钻到最后一层');
     }
-    setPanelData((v) => ({
+    setPanelData((v: any) => ({
       ...v,
       clickData: undefined,
       CheckValue: [],
@@ -144,7 +150,7 @@ export default () => {
     } else {
       const type = {
         DataVSource: true,
-        L7Source: false,
+        RDBSource: false,
       };
       const data = await gitRollupData({
         source: dataSource,
@@ -153,10 +159,13 @@ export default () => {
         areaLevel: adcode.level,
       });
 
-      setLayerSource((prevState) => ({ ...prevState, data: data.geoJson }));
+      setLayerSource((prevState: any) => ({
+        ...prevState,
+        data: data.geoJson,
+      }));
       setAdcode({ code: data.code, level: data.areaLevel, adcode: data.code });
     }
-    setPanelData((v) => ({
+    setPanelData((v: any) => ({
       ...v,
       clickData: undefined,
       CheckValue: [],
@@ -167,9 +176,9 @@ export default () => {
   const onDownload = async () => {
     message.info('数据下载中');
     const data = await downloadData(
-      dataSource,
       adcode.code,
       accuracyValue,
+      dataSource,
       adcode.level,
     );
     const download = document.createElement('a');
@@ -183,7 +192,7 @@ export default () => {
     message.success('数据下载完成');
   };
 
-  const onAccuracyChange = (e) => {
+  const onAccuracyChange = (e: any) => {
     setAccuracyVAlue(e);
   };
 
@@ -191,8 +200,8 @@ export default () => {
     return item();
   }, [sourceType, adcode.level]);
 
-  const onLayerClick = (e) => {
-    setPanelData((v) => ({
+  const onLayerClick = (e: any) => {
+    setPanelData((v: any) => ({
       ...v,
       clickData: {
         geojson: e.feature,
@@ -206,17 +215,21 @@ export default () => {
     return cityValue(adcode.level);
   }, [adcode.level]);
 
-  const onCheckChange = (e) => {
-    setPanelData((v) => ({ ...v, CheckValue: e }));
+  const onCheckChange = (e: any) => {
+    setPanelData((v: any) => ({ ...v, CheckValue: e }));
   };
 
-  const onSourceEdition = (e) => {
+  const onSourceEdition = (e: React.SetStateAction<string>) => {
     setSourceEdition(e);
   };
 
+  useEffect(() => {
+    console.log(adcode);
+  }, [adcode]);
+
   const clickDownload = () => {
     panelData.CheckValue.forEach(async (level: any) => {
-      const data = await dataSource.getChildrenData({
+      const data = await dataSource?.getChildrenData({
         parentName: panelData.clickData.code,
         parentLevel: adcode.level as DataLevel,
         childrenLevel: level,
@@ -236,7 +249,7 @@ export default () => {
       <div style={{ display: 'flex' }}>
         <LarkMap
           {...config}
-          style={{ height: '90vh', width: 'calc(100% - 300px)' }}
+          style={{ height: '75vh', width: 'calc(100% - 300px)' }}
         >
           <ChoroplethLayer
             {...layerOptions}
@@ -254,40 +267,30 @@ export default () => {
             items={items}
           />
           <MapThemeControl position="topleft" />
-          <CustomControl
-            position="bottomleft"
-            className="custom-control-class"
-            style={{
-              background: '#fff',
-              borderRadius: 4,
-              overflow: 'hidden',
-              padding: 16,
-            }}
-          >
-            <div>下钻: 双击要下钻的区域</div>
-            <div>下卷: 双击要上卷的区域</div>
-          </CustomControl>
         </LarkMap>
         <div className="panel">
           <div className="source-select">
-            <div className="source-flex">
-              <div>数据源：</div>
-              <Select
-                value={sourceType}
-                style={{ width: 140 }}
-                onChange={setSourceType}
-                options={sourceOptions}
-              />
+            <div className="source">
+              <div className="source-flex">
+                <div className="source-label">数据源</div>
+                <Select
+                  value={sourceType}
+                  style={{ width: 140 }}
+                  onChange={setSourceType}
+                  options={sourceOptions}
+                />
+              </div>
+              <div className="source-flex">
+                <div className="source-label">版本号</div>
+                <Select
+                  value={sourceEdition}
+                  style={{ width: 140 }}
+                  onChange={onSourceEdition}
+                  options={editionOptions[sourceType]}
+                />
+              </div>
             </div>
-            <div className="source-flex">
-              <div>版本号：</div>
-              <Select
-                value={sourceEdition}
-                style={{ width: 140 }}
-                onChange={onSourceEdition}
-                options={editionOptions[sourceType]}
-              />
-            </div>
+
             <div className="infoText">选择切换不同的数据源和版本号</div>
           </div>
 
@@ -297,9 +300,9 @@ export default () => {
             style={{ paddingTop: '12px' }}
           >
             <Panel header="下载选中数据" key="1">
-              {sourceType === 'L7Source' && (
-                <div style={{ display: 'flex', marginBottom: 10 }}>
-                  <div>数据粒度选择：</div>
+              {sourceType === 'RDBSource' && (
+                <div className="download_check">
+                  <div className="download_check-label">数据粒度选择：</div>
                   <Checkbox.Group
                     options={granularity}
                     onChange={onCheckChange}
@@ -309,11 +312,11 @@ export default () => {
               {panelData.clickData ? (
                 <>
                   <div style={{ display: 'flex', marginBottom: 10 }}>
-                    <div>选中名称：</div>
-                    <div>{panelData.clickData.name}</div>
+                    <div className="click-label">选中名称：</div>
+                    <div>{panelData.clickData?.name}</div>
                   </div>
                   <div style={{ display: 'flex' }}>
-                    <div>选中城市编码：</div>
+                    <div className="click-label">选中城市编码：</div>
                     <Popover content={'点击下载选中数据'}>
                       <a onClick={clickDownload}>{panelData.clickData.code}</a>
                     </Popover>
@@ -325,7 +328,7 @@ export default () => {
             </Panel>
           </Collapse>
 
-          {sourceType === 'L7Source' && (
+          {sourceType === 'RDBSource' && (
             <Collapse
               defaultActiveKey={['1']}
               ghost
@@ -333,7 +336,7 @@ export default () => {
             >
               <Panel header="高级设置" key="1">
                 <div className="flexCenter">
-                  <div>数据精度：</div>
+                  <div className="click-label">数据精度：</div>
                   <Select
                     style={{ width: 120 }}
                     value={accuracyValue}
@@ -348,7 +351,10 @@ export default () => {
             <div style={{ marginRight: 10 }}>数据下载</div>
             <div className="data-input">
               <Popover content={'复制'}>
-                <Button onClick={() => copy(JSON.stringify(layerSource.data))}>
+                <Button
+                  className="copy"
+                  onClick={() => copy(JSON.stringify(layerSource.data))}
+                >
                   <CopyOutlined />
                 </Button>
               </Popover>
@@ -362,8 +368,8 @@ export default () => {
           <div className="originData" style={{}}>
             <div>数据来源：</div>
             <a
-              href={`${dataSource?.info.desc.href}`}
-            >{`${dataSource?.info.desc.text}`}</a>
+              href={`${dataSource?.info?.desc?.href}`}
+            >{`${dataSource?.info?.desc?.text}`}</a>
           </div>
         </div>
       </div>

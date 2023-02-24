@@ -3,12 +3,12 @@ hero:
   title: 行政区划
   description: 数据服务平台、支持可视化预览、下载、SDK、数据服务等方式使用
   actions:
-    - text: 数据下载
-      link: /
+    - text: 预览下载
+      link: /map
     - text: 数据SDK
-      link: /
+      link: /sdk
     - text: 数据服务
-      link: /
+      link: /service
 features:
   - title: 标准
     emoji: 💎

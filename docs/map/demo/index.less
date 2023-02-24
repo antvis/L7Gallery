@@ -8,17 +8,37 @@
   .source-select {
     border-bottom: 1px solid #c2bdbdd9;
 
-    .source-flex {
+    .source {
       display: flex;
-      flex-direction: row;
-      align-items: center;
+      justify-content: space-between;
+    }
+
+    .source-label {
+      margin-bottom: 5px;
+      color: #4c4646d9;
+    }
+
+    .source-flex {
       padding-bottom: 10px;
+    }
+  }
+
+  .download-check {
+    display: flex;
+    margin-bottom: 10px;
+
+    &-label {
+      color: #4c4646d9;
     }
   }
 
   .layerCity {
     padding-bottom: 10px;
     border-bottom: 1px solid #c2bdbdd9;
+  }
+
+  .click-label {
+    color: #4c4646d9;
   }
 
   .infoText {
@@ -43,6 +63,10 @@
     position: absolute;
     bottom: 10px;
     display: flex;
+  }
+
+  .copy {
+    margin-right: 10px;
   }
 }
 

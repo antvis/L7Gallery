@@ -5,5 +5,6 @@ export default defineConfig({
   outputPath: 'docs-dist',
   themeConfig: {
     name: '行政区数据',
+    footer: false,
   },
 });

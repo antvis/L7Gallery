@@ -2,6 +2,8 @@ import { DataVSource } from './source/datavSource';
 import { RDBSource } from './source/rdbSource';
 export * from './source/baseSource';
 export { default as BaseSource } from './source/baseSource';
+export { DataVSource, RDBSource };
+
 export const DataSourceMap = {
   DataVSource,
   RDBSource,

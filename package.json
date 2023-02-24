@@ -31,7 +31,7 @@
     "*.{md,json}": [
       "prettier --write --no-error-on-unmatched-pattern"
     ],
-    "*.{css,less}": [
+    "{src,test}/**/*.{css,less}": [
       "stylelint --fix",
       "prettier --write"
     ],
@@ -59,7 +59,7 @@
     "@types/pbf": "^3.0.2",
     "@umijs/lint": "^4.0.0",
     "antd": "^5.2.2",
-    "dumi": "^2.0.2",
+    "dumi": "^2.1.14",
     "eslint": "^8.23.0",
     "father": "^4.1.0",
     "husky": "^8.0.1",

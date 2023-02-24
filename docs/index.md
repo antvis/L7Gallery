@@ -12,11 +12,15 @@ hero:
 features:
   - title: 标准
     emoji: 💎
-    description: 符合民政部数据规格
+    description: 符合民政部数据规格,省、市、县三级数据，不同版本的历史数据
   - title: 完备
     emoji: 🌈
-    description: 不同版本的历史数据
+    description: 完备的数据下载、显示、应用方式
   - title: 方便
     emoji: 🚀
     description: 提供多种数据使用方式
 ---
+
+## 谁在使用
+
+<WhoAreUsing></WhoAreUsing>

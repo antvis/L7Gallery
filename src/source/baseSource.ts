@@ -14,23 +14,20 @@ export interface IDataOptions {
   precision: DataPrecision;
   level: DataLevel;
   code: number;
-  full: boolean;
 }
 
 export interface ChildrenDataOptions {
-  parentName: number;
+  parentAdcode: number;
   parentLevel: DataLevel;
   childrenLevel: DataLevel;
   precision: DataPrecision;
-  shineUpon: Record<string, string>;
-  full: boolean;
 }
 
 export type DataLevel =
   | 'country'
   | 'province'
   | 'city'
-  | 'district'
+  | 'county'
   | 'jiuduanxian';
 export interface ISourceInfo {
   url: string;
@@ -48,7 +45,7 @@ export default abstract class BaseSource {
     country: undefined,
     province: undefined,
     city: undefined,
-    district: undefined,
+    county: undefined,
     jiuduanxian: undefined,
   };
   protected version: string;

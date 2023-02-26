@@ -21,6 +21,10 @@ features:
     description: 提供多种数据使用方式
 ---
 
+## 数据字段
+
+<code src="./components/DataTab.tsx"></code>
+
 ## 谁在使用
 
 <WhoAreUsing></WhoAreUsing>

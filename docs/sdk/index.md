@@ -82,3 +82,7 @@ source.getData({
 - level 当前层级
 - parentLevel 父级层级
 - parentAdcode 父级 adcode
+
+## 示例
+
+<code src="./demo/city.tsx"></code>

@@ -2,7 +2,11 @@
  * compact: true
  * inline: true
  */
-import { CopyOutlined, DownloadOutlined } from '@ant-design/icons';
+import {
+  CopyOutlined,
+  DownloadOutlined,
+  PictureOutlined,
+} from '@ant-design/icons';
 import type { LayerPopupProps } from '@antv/larkmap';
 import {
   ChoroplethLayer,
@@ -12,244 +16,148 @@ import {
 } from '@antv/larkmap';
 import {
   Button,
-  Checkbox,
-  Collapse,
-  message,
-  Popover,
+  Col,
+  Descriptions,
+  Divider,
+  Radio,
+  Row,
   Select,
   Spin,
+  Switch,
 } from 'antd';
-import type {
-  BaseSource,
-  DataLevel,
-  DataPrecision,
-  SourceType,
-} from 'district-data';
+import type { BaseSource, DataLevel, SourceType } from 'district-data';
 import { DataSourceMap } from 'district-data';
 import React, { useEffect, useMemo, useState } from 'react';
 import './index.less';
 import {
-  accuracyOption,
-  bulkDownload,
-  cityValue,
   config,
-  copy,
-  downloadData,
+  DataType,
+  downloadDataType,
   editionOptions,
-  getDrillingData,
-  gitRollupData,
   item,
   layerOptions,
-  RollupType,
   sourceOptions,
 } from './util';
 
-const { Panel } = Collapse;
+interface IDataInfo {
+  sourceType: SourceType;
+  sourceVersion: string;
+  currentName: string;
+  currentLevel: DataLevel;
+  currentCode: number;
+  hasSubChildren: boolean;
+  childrenLevel: DataLevel;
+  datatype: DataType;
+}
 
 export default () => {
   const [layerSource, setLayerSource] = useState({
     data: { type: 'FeatureCollection', features: [] },
     parser: { type: 'geojson' },
   });
-  const [sourceType, setSourceType] = useState<SourceType>('RDBSource');
-  const [sourceEdition, setSourceEdition] = useState('2023');
-  const [adcode, setAdcode] = useState({
-    code: 100000,
-    adcode: 100000,
-    level: 'country',
+  const size = 'middle';
+  const [dataInfo, setDataInfo] = useState<IDataInfo>({
+    sourceType: 'RDBSource',
+    sourceVersion: '2023',
+    currentLevel: 'country',
+    currentName: '中国',
+    currentCode: 100000,
+    hasSubChildren: true,
+    childrenLevel: 'province',
+    datatype: 'GeoJSON',
   });
-
+  const [drillList, setDrillList] = useState<any[]>([
+    {
+      currentLevel: 'country',
+      currentName: '中国',
+      currentCode: 100000,
+    },
+  ]);
+  const levelList = ['province', 'city', 'county'];
+  const onDataConfigChange = (type: string, value: any) => {
+    setDataInfo({
+      ...dataInfo,
+      [type]: value,
+    });
+  };
   const [dataSource, setDataSource] = useState<BaseSource>();
-  const [accuracyValue, setAccuracyVAlue] = useState<DataPrecision>('low');
-  const [panelData, setPanelData] = useState<any>({
-    clickData: undefined,
-    CheckValue: [],
-    loading: false,
-  });
-
-  useEffect(() => {
-    setSourceEdition(editionOptions[sourceType][0].value);
-  }, [sourceType]);
 
   // 切换数据源
   useEffect(() => {
-    // setSourceEdition(editionOptions[sourceType][0].value);
+    const { sourceType, sourceVersion } = dataInfo;
     const currentSource = new DataSourceMap[sourceType]({
-      version: sourceEdition,
+      version: sourceVersion,
     });
-    setPanelData((v: any) => ({ ...v, loading: true }));
     setDataSource(currentSource);
     // 初始化数据
-    currentSource
-      .getData({ level: 'country', code: 100000, full: true })
-      .then((data) => {
-        setLayerSource((prevState: any) => ({
-          ...prevState,
-          data,
-        }));
-        setPanelData((v: any) => ({
-          ...v,
-          loading: false,
-          clickData: undefined,
-        }));
-      });
-  }, [sourceType, sourceEdition]);
+    currentSource.getData({ level: 'province', code: 100000 }).then((data) => {
+      setLayerSource((prevState: any) => ({
+        ...prevState,
+        data,
+      }));
+    });
+  }, [dataInfo.sourceType, dataInfo.sourceVersion]);
 
   // 下钻
   const onDblClick = async (e: any) => {
-    setPanelData((v: any) => ({ ...v, loading: true }));
-    if (adcode.level !== 'district') {
-      const data = {
-        DataVSource: {
-          parentCode: e.feature.properties?.parent?.adcode
-            ? e.feature.properties?.parent?.adcode
-            : e.feature.properties?.parent
-            ? JSON.parse(e.feature.properties?.parent)?.adcode
-            : undefined,
-          full: adcode.level !== 'city' ? true : false,
-        },
-        RDBSource: {
-          parentCode:
-            e.feature.properties[`${RollupType[adcode.level]}_adcode`],
-          full: undefined,
-        },
-      };
-      const code = e.feature.properties.adcode;
-      const datas = await getDrillingData(
-        adcode.level,
-        dataSource,
-        code,
-        data[sourceType]?.full,
-      );
-
-      const dataLevel = {
-        DataVSource: e.feature.properties.level,
-        RDBSource: datas.level,
-      };
-      setLayerSource((prevState: any) => ({
-        ...prevState,
-        data: datas.GeoJSON,
-      }));
-      setAdcode((state) => ({
-        ...state,
-        code: data[sourceType]?.parentCode,
-        adcode: code,
-        level: dataLevel[sourceType],
-      }));
-    } else {
-      message.info('已下钻到最后一层');
+    if (drillList.length === 3) {
+      return;
     }
-    setPanelData((v: any) => ({
-      ...v,
-      clickData: undefined,
-      CheckValue: [],
-      loading: false,
+    const levelIndex = Math.min(
+      levelList.indexOf(dataInfo.currentLevel) + 1,
+      3,
+    );
+    const currentLevel = levelList[levelIndex] as DataLevel;
+    const currentInfo = {
+      currentLevel: currentLevel,
+      currentName: e.feature.properties.name,
+      currentCode: e.feature.properties.adcode,
+    };
+    setDrillList([...drillList, currentInfo]);
+    setDataInfo({
+      ...dataInfo,
+      ...currentInfo,
+    });
+    const data = await dataSource?.getChildrenData({
+      parentLevel: currentInfo.currentLevel,
+      parentAdcode: currentInfo.currentCode,
+      childrenLevel: levelList[levelIndex + 1] as DataLevel,
+    });
+    setLayerSource((prevState: any) => ({
+      ...prevState,
+      data,
     }));
   };
 
   const onUndblclick = async () => {
-    setPanelData({ ...panelData, loading: true });
-    if (adcode.level === 'country') {
-      message.info('已经上钻到最上层级');
-    } else {
-      const type = {
-        DataVSource: true,
-        RDBSource: false,
-      };
-      const data = await gitRollupData({
-        source: dataSource,
-        code: adcode.code,
-        type: type[sourceType],
-        areaLevel: adcode.level,
-      });
+    const currentList = drillList.slice(0, drillList.length - 1);
+    const currentInfo = currentList[currentList.length - 1];
+    const currentLevel = dataInfo.currentLevel;
 
-      setLayerSource((prevState: any) => ({
-        ...prevState,
-        data: data.geoJson,
-      }));
-      setAdcode({ code: data.code, level: data.areaLevel, adcode: data.code });
-    }
-    setPanelData((v: any) => ({
-      ...v,
-      clickData: undefined,
-      CheckValue: [],
-      loading: false,
+    setDataInfo({
+      ...dataInfo,
+      ...currentInfo,
+    });
+    setDrillList(currentList);
+
+    const data = await dataSource?.getChildrenData({
+      parentLevel: currentInfo.currentLevel,
+      parentAdcode: currentInfo.currentCode,
+      childrenLevel: currentLevel,
+    });
+
+    setLayerSource((prevState: any) => ({
+      ...prevState,
+      data,
     }));
-  };
-
-  const onDownload = async () => {
-    message.info('数据下载中');
-    const data = await downloadData(
-      adcode.code,
-      accuracyValue,
-      dataSource,
-      adcode.level,
-    );
-    const download = document.createElement('a');
-    download.download = `${adcode.adcode}.json`;
-    download.href = `data:text/json;charset=utf-8,${encodeURIComponent(
-      JSON.stringify(data),
-    )}`;
-    download.target = '_blank';
-    download.rel = 'noreferrer';
-    download.click();
-    message.success('数据下载完成');
-  };
-
-  const onAccuracyChange = (e: any) => {
-    setAccuracyVAlue(e);
   };
 
   const items: LayerPopupProps['items'] = useMemo(() => {
     return item();
-  }, [sourceType, adcode.level]);
-
-  const onLayerClick = (e: any) => {
-    setPanelData((v: any) => ({
-      ...v,
-      clickData: {
-        geojson: e.feature,
-        name: e.feature.properties.name,
-        code: e.feature.properties.adcode,
-      },
-    }));
-  };
-
-  const granularity = useMemo(() => {
-    return cityValue(adcode.level);
-  }, [adcode.level]);
-
-  const onCheckChange = (e: any) => {
-    setPanelData((v: any) => ({ ...v, CheckValue: e }));
-  };
-
-  const onSourceEdition = (e: React.SetStateAction<string>) => {
-    setSourceEdition(e);
-  };
-
-  useEffect(() => {
-    console.log(adcode);
-  }, [adcode]);
-
-  const clickDownload = () => {
-    panelData.CheckValue.forEach(async (level: any) => {
-      const data = await dataSource?.getChildrenData({
-        parentName: panelData.clickData.code,
-        parentLevel: adcode.level as DataLevel,
-        childrenLevel: level,
-        shineUpon: {
-          country: '',
-          province: 'province_adcode',
-          city: 'city_adcode',
-        },
-      });
-      bulkDownload(data, level);
-    });
-    bulkDownload(panelData.clickData.geojson, panelData.clickData.name);
-  };
+  }, [dataInfo.sourceType, dataInfo.currentLevel]);
 
   return (
-    <Spin spinning={panelData.loading}>
+    <Spin spinning={false}>
       <div
         style={{
           display: 'flex',
@@ -267,7 +175,7 @@ export default () => {
             source={layerSource}
             onDblClick={onDblClick}
             onUndblclick={onUndblclick}
-            onClick={onLayerClick}
+            // onClick={onLayerClick}
             id="myChoroplethLayer"
           />
           <LayerPopup
@@ -277,105 +185,133 @@ export default () => {
             trigger="hover"
             items={items}
           />
-          <MapThemeControl position="topleft" />
+          <MapThemeControl position="bottomright" />
         </LarkMap>
         <div className="panel">
-          <div className="source-select">
-            <div className="source">
-              <div className="source-flex">
-                <div className="source-label">数据源</div>
-                <Select
-                  value={sourceType}
-                  style={{ width: 140 }}
-                  onChange={setSourceType}
-                  options={sourceOptions}
-                />
-              </div>
-              <div className="source-flex">
-                <div className="source-label">版本号</div>
-                <Select
-                  value={sourceEdition}
-                  style={{ width: 140 }}
-                  onChange={onSourceEdition}
-                  options={editionOptions[sourceType]}
-                />
-              </div>
-            </div>
+          <Row className="row">
+            <Col span={4} className="label">
+              数据源:
+            </Col>
+            <Col span={10}>
+              <Select
+                size={'small'}
+                value={dataInfo.sourceType}
+                style={{ width: '100%' }}
+                onChange={onDataConfigChange.bind(null, 'sourceType')}
+                options={sourceOptions}
+              />
+            </Col>
+            <Col span={4} className="label">
+              版本：
+            </Col>
+            <Col span={6}>
+              <Select
+                value={dataInfo.sourceVersion}
+                size={'small'}
+                onChange={onDataConfigChange.bind(null, 'sourceVersion')}
+                options={editionOptions[dataInfo.sourceType]}
+              />
+            </Col>
+          </Row>
+          <Divider style={{ margin: '8px 0' }}></Divider>
 
-            <div className="infoText">选择切换不同的数据源和版本号</div>
-          </div>
+          <Descriptions title="当前地区">
+            <Descriptions.Item style={{ width: '160px' }} label="名称">
+              {dataInfo.currentName}
+            </Descriptions.Item>
+            <Descriptions.Item label="adcode">
+              {dataInfo.currentCode}
+            </Descriptions.Item>
+          </Descriptions>
 
-          <Collapse
-            defaultActiveKey={['1']}
-            ghost
-            style={{ paddingTop: '12px' }}
-          >
-            <Panel header="下载选中数据" key="1">
-              {sourceType === 'RDBSource' && (
-                <div className="download_check">
-                  <div className="download_check-label">数据粒度选择：</div>
-                  <Checkbox.Group
-                    options={granularity}
-                    onChange={onCheckChange}
-                  />
-                </div>
-              )}
-              {panelData.clickData ? (
-                <>
-                  <div style={{ display: 'flex', marginBottom: 10 }}>
-                    <div className="click-label">选中名称：</div>
-                    <div>{panelData.clickData?.name}</div>
-                  </div>
-                  <div style={{ display: 'flex' }}>
-                    <div className="click-label">选中城市编码：</div>
-                    <Popover content={'点击下载选中数据'}>
-                      <a onClick={clickDownload}>{panelData.clickData.code}</a>
-                    </Popover>
-                  </div>
-                </>
-              ) : (
-                <div className="infoText">暂无数据，请单击图层选择数据</div>
-              )}
-            </Panel>
-          </Collapse>
+          <Row className="row">
+            <Col span={12} className="label">
+              是否包含子区域:
+            </Col>
+            <Col span={12} style={{ textAlign: 'right' }}>
+              <Switch
+                style={{ width: '32px' }}
+                checked={dataInfo.hasSubChildren}
+                onChange={onDataConfigChange.bind(null, 'hasSubChildren')}
+              />
+            </Col>
+          </Row>
 
-          {sourceType === 'RDBSource' && (
-            <Collapse
-              defaultActiveKey={['1']}
-              ghost
-              style={{ paddingTop: '10px' }}
-            >
-              <Panel header="高级设置" key="1">
-                <div className="flexCenter">
-                  <div className="click-label">数据精度：</div>
-                  <Select
-                    style={{ width: 120 }}
-                    value={accuracyValue}
-                    onChange={onAccuracyChange}
-                    options={accuracyOption}
-                  />
-                </div>
-              </Panel>
-            </Collapse>
-          )}
-          <div className="download-content">
-            <div style={{ marginRight: 10 }}>数据下载</div>
-            <div className="data-input">
-              <Popover content={'复制'}>
-                <Button
-                  className="copy"
-                  onClick={() => copy(JSON.stringify(layerSource.data))}
+          {dataInfo.hasSubChildren && (
+            <Row className="row">
+              <Col span={10} className="label">
+                子区域级别:
+              </Col>
+              <Col span={14} style={{ textAlign: 'right' }}>
+                <Radio.Group
+                  defaultValue={dataInfo.childrenLevel}
+                  size={size}
+                  onChange={(e) => {
+                    onDataConfigChange('childrenLevel', e.target.value);
+                  }}
                 >
-                  <CopyOutlined />
-                </Button>
-              </Popover>
-              <Popover content={'下载当前层级全部数据'}>
-                <Button onClick={onDownload}>
-                  <DownloadOutlined />
-                </Button>
-              </Popover>
-            </div>
-          </div>
+                  <Radio.Button value="province">省</Radio.Button>
+                  <Radio.Button value="city">市</Radio.Button>
+                  <Radio.Button value="county">县</Radio.Button>
+                </Radio.Group>
+              </Col>
+            </Row>
+          )}
+
+          <Row className="row">
+            <Col span={6} className="label">
+              数据下载:
+            </Col>
+            <Col span={18} style={{ textAlign: 'right' }}>
+              <Select
+                value={dataInfo.datatype}
+                style={{ width: 120 }}
+                size={size}
+                options={downloadDataType}
+                onChange={onDataConfigChange.bind(null, 'datatype')}
+              />
+
+              <Button
+                type="primary"
+                style={{ marginLeft: '8px' }}
+                icon={<DownloadOutlined />}
+                size={size}
+              />
+
+              <Button
+                type="primary"
+                style={{ marginLeft: '8px' }}
+                icon={<CopyOutlined />}
+                size={size}
+              />
+            </Col>
+          </Row>
+          <Row className="row">
+            <Col span={6} className="label">
+              SVG下载:
+            </Col>
+            <Col span={18} style={{ textAlign: 'right' }}>
+              <Button style={{ pointerEvents: 'none', width: 120 }}>
+                {' '}
+                <PictureOutlined /> SVG{' '}
+              </Button>
+              <Button
+                type="primary"
+                style={{ marginLeft: '8px' }}
+                icon={<DownloadOutlined />}
+                size={size}
+              />
+
+              <Button
+                type="primary"
+                style={{ marginLeft: '8px' }}
+                icon={<CopyOutlined />}
+                size={size}
+              />
+            </Col>
+          </Row>
+          <Row className="row"></Row>
+
           <div className="originData" style={{}}>
             <div>数据来源：</div>
             <a

@@ -20,6 +20,7 @@ export const config: LarkMapProps = {
     style: 'light',
     center: [120.210792, 30.246026],
     zoom: 3,
+    doubleClickZoom: false,
   },
 };
 
@@ -191,7 +192,23 @@ export const cityValue = (level: string) => {
 
 export const sourceOptions = [
   { value: 'DataVSource', label: 'dataV数据源' },
-  { value: 'RDBSource', label: 'L7数据源' },
+  { value: 'RDBSource', label: '数据源' },
+];
+
+export type DataType =
+  | 'GeoJSON'
+  | 'TopoJSON'
+  | 'Shapefiles'
+  | 'JSON'
+  | 'CSV'
+  | 'KML';
+export const downloadDataType = [
+  { key: 'GeoJSON', value: 'GeoJSON', label: 'GeoJSON' },
+  { key: 'TopoJSON', value: 'TopoJSON', label: 'TopoJSON' },
+  { key: 'Shapefiles', value: 'ShpShapefilesfile', label: 'Shapefiles' },
+  { key: 'JSON', value: 'JSON', label: 'JSON' },
+  { key: 'CSV', value: 'CSV', label: 'CSV' },
+  { key: 'KML', value: 'KML', label: 'KML' },
 ];
 export const editionOptions = {
   DataVSource: [

@@ -33,7 +33,7 @@ const DataLevelRecord: Record<DataLevel, string> = {
   country: 'country',
   province: 'province',
   city: 'city',
-  district: 'county',
+  county: 'county',
   jiuduanxian: 'jiuduanxian',
 };
 
@@ -75,32 +75,22 @@ export class RDBSource extends BaseSource {
     FeatureCollection<Geometry | GeometryCollection, Record<string, any>>
   > {
     const {
-      parentName,
+      parentAdcode,
       parentLevel,
       childrenLevel,
-      shineUpon = {
-        country: '',
-        province: 'FIRST_GID',
-        city: 'GID_1',
-        district: 'GID_2',
-      },
       precision = 'low',
     } = ChildrenDataOptions;
+
     const rawData = await this.getData({ level: childrenLevel, precision });
-    //TODO 根据 parentName, parenerLevel 进行数据过滤
-    if (shineUpon[parentLevel] && parentName) {
-      const data = rawData.features.filter((v) => {
-        return v.properties[shineUpon[parentLevel]] === parentName;
+    if (parentAdcode && parentLevel && parentAdcode !== 100000) {
+      rawData.features = rawData.features.filter((feature) => {
+        const key = `${parentLevel}_adcode`;
+        const code = feature.properties[key];
+        return code === parentAdcode;
       });
-      const newData = {
-        type: 'FeatureCollection',
-        features: data,
-      } as FeatureCollection<
-        Geometry | GeometryCollection,
-        Record<string, any>
-      >;
-      return newData;
     }
+    //TODO 根据 parentName, parenerLevel 进行数据过滤
+
     return rawData;
   } /*  */
 
@@ -109,19 +99,15 @@ export class RDBSource extends BaseSource {
     return await res.arrayBuffer();
   };
   // 获取原始数据，数据解析并缓存
-  private async fetchData(
-    level: DataLevel,
-  ): Promise<
-    FeatureCollection<Geometry | GeometryCollection, Record<string, any>>
-  > {
+  private async fetchData(level: DataLevel): Promise<FeatureCollection> {
     if (this.data[level]) {
       // ts-ignore
-      return this.data[level];
+      return this.data[level] as FeatureCollection;
     }
     const url = `${DataConfig.url}@${this.version}/data/${DataLevelRecord[level]}.pbf`;
     const data = await this.fetchArrayBuffer(url);
-    const jsonData = await geobuf.decode(new Pbf(data));
-    this.data[level] = await jsonData;
+    const jsonData = geobuf.decode(new Pbf(data)) as FeatureCollection;
+    this.data[level] = jsonData;
     return jsonData; // 原始数据
   }
 

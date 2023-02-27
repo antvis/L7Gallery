@@ -255,7 +255,7 @@ export default () => {
           <Divider style={{ margin: '8px 0' }}></Divider>
 
           <Descriptions title="当前地区">
-            <Descriptions.Item style={{ width: '160px' }} label="名称">
+            <Descriptions.Item style={{ width: '180px' }} label="名称">
               {dataInfo.currentName}
             </Descriptions.Item>
             <Descriptions.Item label="adcode">

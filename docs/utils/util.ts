@@ -43,7 +43,6 @@ export function exportSVG(data: FeatureCollection) {
 }
 
 export function exportShpfile(data: FeatureCollection, name: string) {
-  console.log(data);
   const options = {
     folder: name,
     types: {

@@ -46,7 +46,6 @@ const source = new RDBSource({
 ### getdata(options)
 
 - level 区划等级 `'country' | 'province'| 'city'| 'district'| 'jiuduanxian'`
-- precision 数据精度 `'high' | 'middle' | 'low';` 可选
 
 ```ts
 // 获取全国的数据
@@ -62,23 +61,44 @@ source.getData({
 });
 ```
 
+<code src="./demo/city.tsx"></code>
+
 ### getChildrenData(options)
 
-下钻场景使用
-
-- adcode 当前 adcode
-- level 当前 层级
-- childrenLevel 子层级
-- precision
-
-### getParentData(options)
-
-上卷场景使用
-
-- level 当前层级
-- parentLevel 父级层级
 - parentAdcode 父级 adcode
+- parentLevel 父级 等级 `'country' | 'province'| 'city'| 'district'| 'jiuduanxian'`
+- childrenLevel 子层级 `'country' | 'province'| 'city'| 'district'| 'jiuduanxian'`
 
-## 示例
+```ts
 
-<code src="./demo/city.tsx"></code>
+// 获取浙江省围栏
+source.getChildrenData({
+    parentAdcode:330000
+    parentLevel:'province',
+    childrenLevel:'province'
+});
+
+```
+
+```ts
+
+// 获取浙江省所有的市
+source.getChildrenData({
+    parentAdcode:330000
+    parentLevel:'province',
+    childrenLevel:'city'
+});
+
+```
+
+```ts
+// 获取浙江省所有县
+source.getChildrenData({
+    parentAdcode:330000
+    parentLevel:'province',
+    childrenLevel:'county'
+});
+
+```
+
+<code src="./demo/zhejiang.tsx"></code>

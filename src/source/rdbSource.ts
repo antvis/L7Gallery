@@ -62,7 +62,7 @@ export class RDBSource extends BaseSource {
   ): Promise<
     FeatureCollection<Geometry | GeometryCollection, Record<string, any>>
   > {
-    const { level = 'country', precision = 'low' } = options;
+    const { level = 'country', precision = 'high' } = options;
     const data = await this.fetchData(level);
     return this.simplifyData(data, precision);
   }

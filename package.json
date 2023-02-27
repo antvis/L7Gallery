@@ -75,7 +75,7 @@
     "prettier-plugin-packagejson": "^2.2.18",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "shp-write": "^0.3.2",
+    "shp-write": "git+https://github.com/transportforcairo/shp-write.git",
     "stylelint": "^14.9.1",
     "tokml": "^0.4.0",
     "topojson": "^3.0.2"

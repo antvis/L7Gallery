@@ -81,7 +81,7 @@ export type DataType =
 export const downloadDataType = [
   { key: 'GeoJSON', value: 'GeoJSON', label: 'GeoJSON' },
   { key: 'TopoJSON', value: 'TopoJSON', label: 'TopoJSON' },
-  // { key: 'Shapefiles', value: 'Shapefiles', label: 'Shapefiles' },
+  { key: 'Shapefiles', value: 'Shapefiles', label: 'Shapefiles' },
   { key: 'JSON', value: 'JSON', label: 'JSON' },
   { key: 'CSV', value: 'CSV', label: 'CSV' },
   { key: 'KML', value: 'KML', label: 'KML' },

@@ -1,7 +1,7 @@
 ---
 hero:
   title: 行政区划
-  description: 数据服务平台、支持可视化预览、下载、SDK、数据服务等方式使用
+  description: 一站式行政区划数据下载、应用平台
   actions:
     - text: 预览下载
       link: /map
@@ -12,13 +12,13 @@ hero:
 features:
   - title: 标准
     emoji: 💎
-    description: 符合民政部数据规格,省、市、县三级数据，不同版本的历史数据
+    description: 符合民政部数据规格,省、市、县三级数据，提供历史版本数据。
   - title: 完备
     emoji: 🌈
-    description: 完备的数据下载、显示、应用方式
+    description: 提供在线可视化下载、服务SDK、服务、可视化组件能不同的数据应用方式。
   - title: 方便
     emoji: 🚀
-    description: 提供多种数据使用方式
+    description: 提供 GeoJSON、JSON、TopoJSON、CSV、KML多种数据下载方式，提供 SVG 格式图像下载
 ---
 
 ## 数据字段

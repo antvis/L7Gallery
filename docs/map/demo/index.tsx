@@ -287,9 +287,9 @@ export default () => {
               </Col>
               <Col span={14} style={{ textAlign: 'right' }}>
                 <Radio.Group
-                  //   defaultValue={childrenLevelList[0]|| 'province'}
-                  value={childrenLevelList[0] || 'province'}
+                  defaultValue={childrenLevelList[0] || 'province'}
                   size={size}
+                  value={dataInfo.childrenLevel}
                   onChange={(e) => {
                     onDataConfigChange('childrenLevel', e.target.value);
                   }}

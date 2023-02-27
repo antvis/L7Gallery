@@ -3,7 +3,7 @@ import { FeatureCollection } from '@turf/helpers';
 import geojson2svg from 'geojson2svg';
 import shpWrite from 'shp-write';
 import tokml from 'tokml';
-import topojson from 'topojson';
+import * as topojson from 'topojson';
 
 export function exportSVG(data: FeatureCollection) {
   const bbox = extent(data).bbox || [-180, -90, 180, 90];
@@ -38,7 +38,8 @@ export function exportSVG(data: FeatureCollection) {
   return `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg"> ${svgStrings}</svg>`;
 }
 
-export function DownLoadShpfile(data: FeatureCollection, name: string) {
+export function exportShpfile(data: FeatureCollection, name: string) {
+  console.log(data);
   const options = {
     folder: name,
     types: {
@@ -47,6 +48,7 @@ export function DownLoadShpfile(data: FeatureCollection, name: string) {
       line: `${name}lines`,
     },
   };
+
   shpWrite.download(data, options);
 }
 
@@ -83,24 +85,24 @@ export function exportKML(data: FeatureCollection) {
 export function downloadData(
   fileName: string,
   data: FeatureCollection,
-  type: 'svg' | 'topojson' | 'geojson' | 'csv' | 'json' | 'kml',
+  type: 'SVG' | 'TopoJSON' | 'GeoJSON' | 'CSV' | 'JSON' | 'KML',
 ) {
   const datastring =
-    type === 'svg'
+    type === 'SVG'
       ? exportSVG(data)
-      : type === 'topojson'
+      : type === 'TopoJSON'
       ? exportTopoJSON(data)
-      : type === 'geojson'
+      : type === 'GeoJSON'
       ? exportGeoJSON(data)
-      : type === 'csv'
+      : type === 'CSV'
       ? exportCSV(data)
-      : type === 'json'
+      : type === 'JSON'
       ? exportJSON(data)
-      : type === 'kml'
+      : type === 'KML'
       ? exportKML(data)
       : '';
   const download = document.createElement('a');
-  download.download = `${fileName}.${type}`;
+  download.download = `${fileName}.${type.toLowerCase()}`;
   download.href = `data:text/json;charset=utf-8,${encodeURIComponent(
     datastring,
   )}`;

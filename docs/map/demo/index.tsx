@@ -14,6 +14,7 @@ import {
   LayerPopup,
   MapThemeControl,
 } from '@antv/larkmap';
+import { FeatureCollection } from '@turf/helpers';
 import {
   Button,
   Col,
@@ -28,6 +29,7 @@ import {
 import type { BaseSource, DataLevel, SourceType } from 'district-data';
 import { DataSourceMap } from 'district-data';
 import React, { useEffect, useMemo, useState } from 'react';
+import { downloadData, exportShpfile } from '../../utils/util';
 import './index.less';
 import {
   config,
@@ -81,6 +83,53 @@ export default () => {
     });
   };
   const [dataSource, setDataSource] = useState<BaseSource>();
+
+  const getDownloadData = async () => {
+    const { currentLevel, hasSubChildren, childrenLevel, currentCode } =
+      dataInfo;
+    let data;
+    if (!hasSubChildren) {
+      // 没有子级,取父级数据
+    } else {
+      data = (await dataSource?.getChildrenData({
+        parentLevel: currentLevel,
+        parentAdcode: currentCode,
+        childrenLevel: childrenLevel,
+      })) as FeatureCollection;
+    }
+    return data;
+  };
+
+  const onDownload = async () => {
+    const {
+      datatype,
+      currentLevel,
+      hasSubChildren,
+      childrenLevel,
+      currentCode,
+      currentName,
+    } = dataInfo;
+    let data;
+    if (!hasSubChildren) {
+      // 没有子级,取父级数据
+    } else {
+      data = (await dataSource?.getChildrenData({
+        parentLevel: currentLevel,
+        parentAdcode: currentCode,
+        childrenLevel: childrenLevel,
+      })) as FeatureCollection;
+      if (datatype === 'Shapefiles') {
+        exportShpfile(data, currentName);
+      } else {
+        downloadData(currentName, data, datatype);
+      }
+    }
+  };
+  const onDownloadSvg = async () => {
+    const { currentName } = dataInfo;
+    const data = (await getDownloadData()) as FeatureCollection;
+    return downloadData(currentName, data, 'SVG');
+  };
 
   // 切换数据源
   useEffect(() => {
@@ -276,6 +325,7 @@ export default () => {
                 style={{ marginLeft: '8px' }}
                 icon={<DownloadOutlined />}
                 size={size}
+                onClick={onDownload}
               />
 
               <Button
@@ -300,6 +350,7 @@ export default () => {
                 style={{ marginLeft: '8px' }}
                 icon={<DownloadOutlined />}
                 size={size}
+                onClick={onDownloadSvg}
               />
 
               <Button

@@ -1,6 +1,5 @@
 import type { ChoroplethLayerProps, LarkMapProps } from '@antv/larkmap';
 import { message } from 'antd';
-import type { BaseSource, DataPrecision } from 'district-data';
 
 export const layerOptions: Omit<ChoroplethLayerProps, 'source'> = {
   autoFit: true,
@@ -30,109 +29,12 @@ export const DrillingType: Record<any, any> = {
   city: 'district',
 };
 
-const DrillingCode: Record<any, any> = {
-  province: '',
-  city: '',
-  district: 'code',
-};
-
 export const RollupType: Record<any, any> = {
   district: 'city',
   city: 'province',
   province: 'country',
   country: '',
   jiuduanxian: '',
-};
-
-export const getDrillingData = async (
-  areaLevel: any,
-  source?: BaseSource,
-  code?: number,
-  full?: boolean,
-) => {
-  const data = await source?.getChildrenData({
-    parentName: code,
-    parentLevel: areaLevel,
-    childrenLevel: DrillingType[areaLevel],
-    shineUpon: {
-      country: '',
-      province: 'province_adcode',
-      city: 'city_adcode',
-      district: '',
-      jiuduanxian: '',
-    },
-    full: full,
-  });
-  console.log(data);
-  return {
-    GeoJSON: data,
-    level: DrillingType[areaLevel],
-  };
-};
-
-export const gitRollupData = async (option: any) => {
-  const { source, code, type, areaLevel } = option;
-  if (type) {
-    const fullData = await source?.getData({ code: code, full: true });
-    const data = await source?.getData({ code: code });
-    const dataCode = data?.features[0].properties.parent.adcode;
-    const dataLevel = data?.features[0].properties.level;
-    if (typeof dataCode !== 'undefined') {
-      return {
-        geoJson: fullData,
-        code: dataCode,
-        areaLevel: dataLevel,
-      };
-    } else {
-      if (dataCode === null) {
-        return { geoJson: fullData, areaLevel: dataLevel, code: 100000 };
-      } else {
-        const codeJson = JSON.parse(data?.features[0].properties.parent).adcode;
-        return { geoJson: fullData, code: codeJson, areaLevel: dataLevel };
-      }
-    }
-  }
-  const data = await source?.getChildrenData({
-    parentName: code,
-    parentLevel: RollupType[areaLevel],
-    childrenLevel: RollupType[areaLevel],
-    shineUpon: {
-      country: '',
-      province: '',
-      city: 'province_adcode',
-      district: 'city_adcode',
-      jiuduanxian: '',
-    },
-  });
-  return {
-    geoJson: data,
-    code: option[DrillingCode[areaLevel]]
-      ? option[DrillingCode[areaLevel]]
-      : 100000,
-    areaLevel: RollupType[areaLevel],
-  };
-};
-
-export const downloadData = async (
-  code: number,
-  accuracy: DataPrecision,
-  source?: BaseSource,
-  areaLevel?: any,
-) => {
-  const data = await source?.getChildrenData({
-    parentName: code,
-    parentLevel: areaLevel,
-    childrenLevel: areaLevel,
-    shineUpon: {
-      country: '',
-      province: '',
-      city: 'city_adcode',
-      district: 'district_adcode',
-    },
-    precision: accuracy,
-    full: true,
-  });
-  return data;
 };
 
 export const copy = (data: any) => {
@@ -205,7 +107,7 @@ export type DataType =
 export const downloadDataType = [
   { key: 'GeoJSON', value: 'GeoJSON', label: 'GeoJSON' },
   { key: 'TopoJSON', value: 'TopoJSON', label: 'TopoJSON' },
-  { key: 'Shapefiles', value: 'ShpShapefilesfile', label: 'Shapefiles' },
+  { key: 'Shapefiles', value: 'Shapefiles', label: 'Shapefiles' },
   { key: 'JSON', value: 'JSON', label: 'JSON' },
   { key: 'CSV', value: 'CSV', label: 'CSV' },
   { key: 'KML', value: 'KML', label: 'KML' },

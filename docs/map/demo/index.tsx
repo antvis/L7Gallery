@@ -20,37 +20,31 @@ import {
   Col,
   Descriptions,
   Divider,
+  message,
   Radio,
   Row,
   Select,
   Spin,
   Switch,
 } from 'antd';
-import type { BaseSource, DataLevel, SourceType } from 'district-data';
+import type { BaseSource, DataLevel } from 'district-data';
 import { DataSourceMap } from 'district-data';
 import React, { useEffect, useMemo, useState } from 'react';
-import { downloadData, exportShpfile } from '../../utils/util';
+import { downloadData, exportShpfile, exportSVG } from '../../utils/util';
 import './index.less';
 import {
   config,
-  DataType,
+  defaultDataInfo,
   downloadDataType,
   editionOptions,
+  getChildrenLevel,
+  getChildrenList,
+  getParentLevel,
+  IDataInfo,
   item,
   layerOptions,
   sourceOptions,
 } from './util';
-
-interface IDataInfo {
-  sourceType: SourceType;
-  sourceVersion: string;
-  currentName: string;
-  currentLevel: DataLevel;
-  currentCode: number;
-  hasSubChildren: boolean;
-  childrenLevel: DataLevel;
-  datatype: DataType;
-}
 
 export default () => {
   const [layerSource, setLayerSource] = useState({
@@ -58,16 +52,7 @@ export default () => {
     parser: { type: 'geojson' },
   });
   const size = 'middle';
-  const [dataInfo, setDataInfo] = useState<IDataInfo>({
-    sourceType: 'RDBSource',
-    sourceVersion: '2023',
-    currentLevel: 'country',
-    currentName: '中国',
-    currentCode: 100000,
-    hasSubChildren: true,
-    childrenLevel: 'province',
-    datatype: 'GeoJSON',
-  });
+  const [dataInfo, setDataInfo] = useState<IDataInfo>(defaultDataInfo);
   const [drillList, setDrillList] = useState<any[]>([
     {
       currentLevel: 'country',
@@ -75,7 +60,9 @@ export default () => {
       currentCode: 100000,
     },
   ]);
-  const levelList = ['province', 'city', 'county'];
+  const childrenLevelList = useMemo(() => {
+    return getChildrenList(dataInfo.currentLevel);
+  }, [dataInfo.currentLevel]);
   const onDataConfigChange = (type: string, value: any) => {
     setDataInfo({
       ...dataInfo,
@@ -89,6 +76,13 @@ export default () => {
       dataInfo;
     let data;
     if (!hasSubChildren) {
+      const parentLevel = getParentLevel(currentLevel);
+      console.log(parentLevel, currentLevel, currentCode);
+      data = (await dataSource?.getChildrenData({
+        parentLevel: currentLevel,
+        parentAdcode: currentCode,
+        childrenLevel: currentLevel,
+      })) as FeatureCollection;
       // 没有子级,取父级数据
     } else {
       data = (await dataSource?.getChildrenData({
@@ -101,34 +95,36 @@ export default () => {
   };
 
   const onDownload = async () => {
-    const {
-      datatype,
-      currentLevel,
-      hasSubChildren,
-      childrenLevel,
-      currentCode,
-      currentName,
-    } = dataInfo;
-    let data;
-    if (!hasSubChildren) {
-      // 没有子级,取父级数据
+    const { datatype, currentName } = dataInfo;
+    const data = await getDownloadData();
+
+    if (datatype === 'Shapefiles') {
+      exportShpfile(data, currentName);
     } else {
-      data = (await dataSource?.getChildrenData({
-        parentLevel: currentLevel,
-        parentAdcode: currentCode,
-        childrenLevel: childrenLevel,
-      })) as FeatureCollection;
-      if (datatype === 'Shapefiles') {
-        exportShpfile(data, currentName);
-      } else {
-        downloadData(currentName, data, datatype);
-      }
+      downloadData(currentName, data, datatype);
     }
   };
   const onDownloadSvg = async () => {
     const { currentName } = dataInfo;
     const data = (await getDownloadData()) as FeatureCollection;
     return downloadData(currentName, data, 'SVG');
+  };
+
+  const onCopyData = async () => {
+    const data = (await getDownloadData()) as FeatureCollection;
+    const { datatype } = dataInfo;
+    if (datatype === 'Shapefiles') {
+      message.warning('暂不支持复制Shapefiles数据');
+      return;
+    }
+    navigator.clipboard.writeText(JSON.stringify(data));
+    message.success('复制成功');
+  };
+  const onCopySvg = async () => {
+    const data = (await getDownloadData()) as FeatureCollection;
+    const svgstring = await exportSVG(data);
+    navigator.clipboard.writeText(svgstring);
+    message.success('复制成功');
   };
 
   // 切换数据源
@@ -149,14 +145,10 @@ export default () => {
 
   // 下钻
   const onDblClick = async (e: any) => {
-    if (drillList.length === 3) {
+    const currentLevel = getChildrenLevel(dataInfo.currentLevel) as DataLevel;
+    if (currentLevel === 'county') {
       return;
     }
-    const levelIndex = Math.min(
-      levelList.indexOf(dataInfo.currentLevel) + 1,
-      3,
-    );
-    const currentLevel = levelList[levelIndex] as DataLevel;
     const currentInfo = {
       currentLevel: currentLevel,
       currentName: e.feature.properties.name,
@@ -170,7 +162,7 @@ export default () => {
     const data = await dataSource?.getChildrenData({
       parentLevel: currentInfo.currentLevel,
       parentAdcode: currentInfo.currentCode,
-      childrenLevel: levelList[levelIndex + 1] as DataLevel,
+      childrenLevel: getChildrenLevel(currentLevel),
     });
     setLayerSource((prevState: any) => ({
       ...prevState,
@@ -182,6 +174,9 @@ export default () => {
     const currentList = drillList.slice(0, drillList.length - 1);
     const currentInfo = currentList[currentList.length - 1];
     const currentLevel = dataInfo.currentLevel;
+    if (currentLevel === 'country') {
+      return;
+    }
 
     setDataInfo({
       ...dataInfo,
@@ -204,7 +199,6 @@ export default () => {
   const items: LayerPopupProps['items'] = useMemo(() => {
     return item();
   }, [dataInfo.sourceType, dataInfo.currentLevel]);
-
   return (
     <Spin spinning={false}>
       <div
@@ -275,7 +269,7 @@ export default () => {
 
           <Row className="row">
             <Col span={12} className="label">
-              是否包含子区域:
+              包含子区域:
             </Col>
             <Col span={12} style={{ textAlign: 'right' }}>
               <Switch
@@ -293,14 +287,19 @@ export default () => {
               </Col>
               <Col span={14} style={{ textAlign: 'right' }}>
                 <Radio.Group
-                  defaultValue={dataInfo.childrenLevel}
+                  //   defaultValue={childrenLevelList[0]|| 'province'}
+                  value={childrenLevelList[0] || 'province'}
                   size={size}
                   onChange={(e) => {
                     onDataConfigChange('childrenLevel', e.target.value);
                   }}
                 >
-                  <Radio.Button value="province">省</Radio.Button>
-                  <Radio.Button value="city">市</Radio.Button>
+                  {childrenLevelList.indexOf('province') !== -1 && (
+                    <Radio.Button value="province">省</Radio.Button>
+                  )}
+                  {childrenLevelList.indexOf('city') !== -1 && (
+                    <Radio.Button value="city">市</Radio.Button>
+                  )}
                   <Radio.Button value="county">县</Radio.Button>
                 </Radio.Group>
               </Col>
@@ -332,6 +331,7 @@ export default () => {
                 type="primary"
                 style={{ marginLeft: '8px' }}
                 icon={<CopyOutlined />}
+                onClick={onCopyData}
                 size={size}
               />
             </Col>
@@ -357,6 +357,7 @@ export default () => {
                 type="primary"
                 style={{ marginLeft: '8px' }}
                 icon={<CopyOutlined />}
+                onClick={onCopySvg}
                 size={size}
               />
             </Col>

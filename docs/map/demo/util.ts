@@ -1,5 +1,6 @@
 import type { ChoroplethLayerProps, LarkMapProps } from '@antv/larkmap';
 import { message } from 'antd';
+import { DataLevel, SourceType } from 'district-data';
 
 export const layerOptions: Omit<ChoroplethLayerProps, 'source'> = {
   autoFit: true,
@@ -47,17 +48,6 @@ export const copy = (data: any) => {
   message.success('复制成功');
 };
 
-export const bulkDownload = (data: any, level: string) => {
-  const download = document.createElement('a');
-  download.download = `${level}.json`;
-  download.href = `data:text/json;charset=utf-8,${encodeURIComponent(
-    JSON.stringify(data),
-  )}`;
-  download.target = '_blank';
-  download.rel = 'noreferrer';
-  download.click();
-};
-
 export const item = () => {
   return [
     {
@@ -74,22 +64,6 @@ export const item = () => {
       ],
     },
   ];
-};
-
-export const cityValue = (level: string) => {
-  return {
-    country: [
-      { label: '省', value: 'province' },
-      { label: '市', value: 'city' },
-      { label: '县', value: 'district' },
-    ],
-    province: [
-      { label: '市', value: 'city' },
-      { label: '县', value: 'district' },
-    ],
-    city: [{ label: '县', value: 'district' }],
-    district: [],
-  }[level];
 };
 
 export const sourceOptions = [
@@ -128,3 +102,68 @@ export const accuracyOption = [
   { value: 'middle', label: '中' },
   { value: 'high', label: '高' },
 ];
+
+export interface IDataInfo {
+  sourceType: SourceType;
+  sourceVersion: string;
+  currentName: string;
+  currentLevel: DataLevel;
+  currentCode: number;
+  hasSubChildren: boolean;
+  childrenLevel: DataLevel;
+  datatype: DataType;
+}
+export const defaultDataInfo: IDataInfo = {
+  sourceType: 'RDBSource',
+  sourceVersion: '2023',
+  currentLevel: 'country',
+  currentName: '中国',
+  currentCode: 100000,
+  hasSubChildren: true,
+  childrenLevel: 'province',
+  datatype: 'GeoJSON',
+};
+
+export const getParentLevel = (level: DataLevel): DataLevel | undefined => {
+  switch (level) {
+    case 'country':
+      return 'country';
+    case 'province':
+      return 'country';
+    case 'city':
+      return 'province';
+    case 'county':
+      return 'city';
+    default:
+      return undefined;
+  }
+};
+
+export const getChildrenLevel = (level: DataLevel): DataLevel | undefined => {
+  switch (level) {
+    case 'country':
+      return 'province';
+    case 'province':
+      return 'city';
+    case 'city':
+      return 'county';
+    case 'county':
+      return 'county';
+    default:
+      return undefined;
+  }
+};
+
+export const getChildrenList = (level: DataLevel): DataLevel[] => {
+  console.log(level);
+  switch (level) {
+    case 'country':
+      return ['province', 'city', 'county'];
+    case 'province':
+      return ['city', 'county'];
+    case 'city':
+      return ['county'];
+    default:
+      return [];
+  }
+};

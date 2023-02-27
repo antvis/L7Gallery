@@ -1,8 +1,12 @@
 import extent from '@turf/envelope';
 import { FeatureCollection } from '@turf/helpers';
+// @ts-ignore
 import geojson2svg from 'geojson2svg';
+// @ts-ignore
 import shpWrite from 'shp-write';
+// @ts-ignore
 import tokml from 'tokml';
+// @ts-ignore
 import * as topojson from 'topojson';
 
 export function exportSVG(data: FeatureCollection) {

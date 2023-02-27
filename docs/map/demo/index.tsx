@@ -39,11 +39,9 @@ import {
   editionOptions,
   getChildrenLevel,
   getChildrenList,
-  getParentLevel,
   IDataInfo,
   item,
   layerOptions,
-  sourceOptions,
 } from './util';
 
 export default () => {
@@ -76,8 +74,6 @@ export default () => {
       dataInfo;
     let data;
     if (!hasSubChildren) {
-      const parentLevel = getParentLevel(currentLevel);
-      console.log(parentLevel, currentLevel, currentCode);
       data = (await dataSource?.getChildrenData({
         parentLevel: currentLevel,
         parentAdcode: currentCode,
@@ -232,22 +228,22 @@ export default () => {
         </LarkMap>
         <div className="panel">
           <Row className="row">
-            <Col span={4} className="label">
+            {/* <Col span={4} className="label">
               数据源:
             </Col>
-            <Col span={10}>
+            <Col span={10} >
               <Select
+                style={{width:'120px'}}
                 size={'small'}
                 value={dataInfo.sourceType}
-                style={{ width: '100%' }}
                 onChange={onDataConfigChange.bind(null, 'sourceType')}
                 options={sourceOptions}
               />
-            </Col>
-            <Col span={4} className="label">
+            </Col>  */}
+            <Col span={8} className="label">
               版本：
             </Col>
-            <Col span={6}>
+            <Col span={16} style={{ textAlign: 'right' }}>
               <Select
                 value={dataInfo.sourceVersion}
                 size={'small'}

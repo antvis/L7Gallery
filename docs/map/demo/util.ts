@@ -20,6 +20,7 @@ export const config: LarkMapProps = {
     style: 'light',
     center: [120.210792, 30.246026],
     zoom: 3,
+    maxZoom: 8,
     doubleClickZoom: false,
   },
 };
@@ -74,14 +75,14 @@ export const sourceOptions = [
 export type DataType =
   | 'GeoJSON'
   | 'TopoJSON'
-  | 'Shapefiles'
+  // | 'Shapefiles'
   | 'JSON'
   | 'CSV'
   | 'KML';
 export const downloadDataType = [
   { key: 'GeoJSON', value: 'GeoJSON', label: 'GeoJSON' },
   { key: 'TopoJSON', value: 'TopoJSON', label: 'TopoJSON' },
-  { key: 'Shapefiles', value: 'Shapefiles', label: 'Shapefiles' },
+  // { key: 'Shapefiles', value: 'Shapefiles', label: 'Shapefiles' },
   { key: 'JSON', value: 'JSON', label: 'JSON' },
   { key: 'CSV', value: 'CSV', label: 'CSV' },
   { key: 'KML', value: 'KML', label: 'KML' },

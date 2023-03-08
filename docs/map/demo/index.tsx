@@ -5,6 +5,7 @@
 import {
   CopyOutlined,
   DownloadOutlined,
+  InfoCircleOutlined,
   PictureOutlined,
 } from '@ant-design/icons';
 import type { LayerPopupProps } from '@antv/larkmap';
@@ -26,11 +27,12 @@ import {
   Select,
   Spin,
   Switch,
+  Tooltip,
 } from 'antd';
 import type { BaseSource, DataLevel } from 'district-data';
 import { DataSourceMap } from 'district-data';
 import React, { useEffect, useMemo, useState } from 'react';
-import { downloadData, exportShpfile, exportSVG } from '../../utils/util';
+import { downloadData, exportSVG } from '../../utils/util';
 import './index.less';
 import {
   config,
@@ -93,26 +95,25 @@ export default () => {
   const onDownload = async () => {
     const { datatype, currentName } = dataInfo;
     const data = await getDownloadData();
-
-    if (datatype === 'Shapefiles') {
-      exportShpfile(data, currentName);
-    } else {
-      downloadData(currentName, data, datatype);
-    }
+    downloadData(currentName, data, datatype);
   };
   const onDownloadSvg = async () => {
     const { currentName } = dataInfo;
     const data = (await getDownloadData()) as FeatureCollection;
     return downloadData(currentName, data, 'SVG');
   };
+  const onDownloadGUOJIE = async () => {
+    const { datatype } = dataInfo;
+    const data = await (
+      await fetch(
+        'https://mdn.alipayobjects.com/afts/file/A*zMVuS7mKBI4AAAAAAAAAAAAADrd2AQ/%E5%85%A8%E5%9B%BD%E8%BE%B9%E7%95%8C.json',
+      )
+    ).json();
+    downloadData('中国边界', data, datatype);
+  };
 
   const onCopyData = async () => {
     const data = (await getDownloadData()) as FeatureCollection;
-    const { datatype } = dataInfo;
-    if (datatype === 'Shapefiles') {
-      message.warning('暂不支持复制Shapefiles数据');
-      return;
-    }
     navigator.clipboard.writeText(JSON.stringify(data));
     message.success('复制成功');
   };
@@ -214,7 +215,6 @@ export default () => {
             source={layerSource}
             onDblClick={onDblClick}
             onUndblclick={onUndblclick}
-            // onClick={onLayerClick}
             id="myChoroplethLayer"
           />
           <LayerPopup
@@ -228,18 +228,6 @@ export default () => {
         </LarkMap>
         <div className="panel">
           <Row className="row">
-            {/* <Col span={4} className="label">
-              数据源:
-            </Col>
-            <Col span={10} >
-              <Select
-                style={{width:'120px'}}
-                size={'small'}
-                value={dataInfo.sourceType}
-                onChange={onDataConfigChange.bind(null, 'sourceType')}
-                options={sourceOptions}
-              />
-            </Col>  */}
             <Col span={8} className="label">
               版本：
             </Col>
@@ -358,8 +346,35 @@ export default () => {
               />
             </Col>
           </Row>
-          <Row className="row"></Row>
+          <Row className="row">
+            <Col span={12} className="label">
+              中国边界下载{' '}
+              <Tooltip
+                placement="top"
+                overlayInnerStyle={{
+                  color: '#111',
+                }}
+                color={'#fff'}
+                title={
+                  '全国边界下载：包含国界线、海岸线、香港界、海上省界、未定国界等线要素.'
+                }
+              >
+                {' '}
+                <InfoCircleOutlined />
+              </Tooltip>
+            </Col>
+            <Col span={12} style={{ textAlign: 'right' }}>
+              <Button
+                type="primary"
+                style={{ marginLeft: '8px' }}
+                icon={<DownloadOutlined />}
+                onClick={onDownloadGUOJIE}
+                size={size}
+              />
+            </Col>
+          </Row>
 
+          {/* 全国边界下载：包含国界线、海岸线、香港界、海上省界、未定国界等线要素 */}
           <div className="originData" style={{}}>
             <div>数据来源：</div>
             <a

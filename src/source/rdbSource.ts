@@ -20,7 +20,8 @@ const DataConfig = {
     text: '锐多宝的地理空间',
     href: 'https://github.com/ruiduobao/shengshixian.com',
   },
-  url: 'https://unpkg.com/xingzhengqu',
+  url: 'http://npm.elemecdn.com/xingzhengqu',
+  // url: 'https://unpkg.com/xingzhengqu',
 };
 
 const DataAccuracy: Record<DataPrecision, number> = {
@@ -38,6 +39,7 @@ const DataLevelRecord: Record<DataLevel, string> = {
 };
 
 // `https://unpkg.com/${version}/data/${code}.pbf`;
+// http://npm.elemecdn.com/
 
 export class RDBSource extends BaseSource {
   public info = DataConfig;

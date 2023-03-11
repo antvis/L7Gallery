@@ -1,6 +1,6 @@
 {
   "name": "district-data",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "行政区划数据 SDK",
   "license": "MIT",
   "module": "dist/esm/index.js",

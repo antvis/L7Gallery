@@ -64,9 +64,12 @@ export class RDBSource extends BaseSource {
   ): Promise<
     FeatureCollection<Geometry | GeometryCollection, Record<string, any>>
   > {
-    const { level = 'country', precision = 'high' } = options;
-    const data = await this.fetchData(level);
-    return this.simplifyData(data, precision);
+    const { level = 'country' } = options;
+    return (await this.fetchData(level)) as FeatureCollection<
+      Geometry | GeometryCollection,
+      Record<string, any>
+    >;
+    // return this.simplifyData(data, precision);
   }
 
   // 获取子级数据,数据下载时使用

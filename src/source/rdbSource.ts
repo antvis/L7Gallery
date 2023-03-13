@@ -20,7 +20,7 @@ const DataConfig = {
     text: '锐多宝的地理空间',
     href: 'https://github.com/ruiduobao/shengshixian.com',
   },
-  url: 'http://npm.elemecdn.com/xingzhengqu',
+  url: 'https://npm.elemecdn.com/xingzhengqu',
   // url: 'https://unpkg.com/xingzhengqu',
 };
 
@@ -87,8 +87,9 @@ export class RDBSource extends BaseSource {
     } = ChildrenDataOptions;
 
     const rawData = await this.getData({ level: childrenLevel, precision });
+    let resultFeatures;
     if (parentAdcode && parentLevel && parentAdcode !== 100000) {
-      rawData.features = rawData.features.filter((feature) => {
+      resultFeatures = rawData.features.filter((feature) => {
         const key = `${parentLevel}_adcode`;
         const code = feature.properties[key];
         return code === parentAdcode;
@@ -96,7 +97,10 @@ export class RDBSource extends BaseSource {
     }
     //TODO 根据 parentName, parenerLevel 进行数据过滤
 
-    return rawData;
+    return {
+      type: 'FeatureCollection',
+      features: resultFeatures || [],
+    };
   } /*  */
 
   private fetchArrayBuffer = async (url: string) => {

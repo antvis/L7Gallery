@@ -117,7 +117,7 @@ export interface IDataInfo {
 }
 export const defaultDataInfo: IDataInfo = {
   sourceType: 'RDBSource',
-  sourceVersion: '2024',
+  sourceVersion: '2023',
   currentLevel: 'country',
   currentName: '中国',
   currentCode: 100000,

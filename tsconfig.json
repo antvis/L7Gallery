@@ -12,5 +12,5 @@
       "district-data/*": ["src/*", "*"]
     }
   },
-  "include": [".dumirc.ts", "src/**/*", "docs/map"]
+  "include": [".dumi/**/*", ".dumirc.ts", "src/**/*", "docs/map"]
 }

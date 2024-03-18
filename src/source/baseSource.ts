@@ -14,6 +14,7 @@ export interface IDataOptions {
   precision: DataPrecision;
   level: DataLevel;
   code: number;
+  type: 'wgs84' | 'gcj02';
 }
 
 export interface ChildrenDataOptions {

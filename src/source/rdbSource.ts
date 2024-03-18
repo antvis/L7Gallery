@@ -117,7 +117,7 @@ export class RDBSource extends BaseSource {
       return this.data[level] as FeatureCollection;
     }
     const url =
-      this.version === '2024'
+      +this.version >= 2024
         ? `${DataConfig.url}@${this.version}/data/${type}/${DataLevelRecord[level]}.pbf`
         : `${DataConfig.url}@${this.version}/data/${DataLevelRecord[level]}.pbf`;
     const data = await this.fetchArrayBuffer(url);

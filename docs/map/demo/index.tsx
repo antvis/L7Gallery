@@ -21,13 +21,13 @@ import {
   Col,
   Descriptions,
   Divider,
-  message,
   Radio,
   Row,
   Select,
   Spin,
   Switch,
   Tooltip,
+  message,
 } from 'antd';
 import type { BaseSource, DataLevel } from 'district-data';
 import { DataSourceMap } from 'district-data';
@@ -35,13 +35,13 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { downloadData, exportSVG } from '../../utils/util';
 import './index.less';
 import {
+  IDataInfo,
   config,
   defaultDataInfo,
   downloadDataType,
   editionOptions,
   getChildrenLevel,
   getChildrenList,
-  IDataInfo,
   item,
   layerOptions,
 } from './util';

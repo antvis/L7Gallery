@@ -117,7 +117,7 @@ export interface IDataInfo {
 }
 export const defaultDataInfo: IDataInfo = {
   sourceType: 'RDBSource',
-  sourceVersion: '2023',
+  sourceVersion: '2024',
   currentLevel: 'country',
   currentName: '中国',
   currentCode: 100000,
@@ -157,7 +157,6 @@ export const getChildrenLevel = (level: DataLevel): DataLevel | undefined => {
 };
 
 export const getChildrenList = (level: DataLevel): DataLevel[] => {
-  console.log(level);
   switch (level) {
     case 'country':
       return ['province', 'city', 'county'];

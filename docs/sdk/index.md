@@ -26,7 +26,7 @@ npm i district-data
 ### cdn 引用
 
 ```html
-<script href=''>
+<script href='https://unpkg.com/district-data@0.0.7/dist/umd/district-data.min.js'>
 
 ```
 

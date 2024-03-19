@@ -39,7 +39,7 @@ export class DataVSource extends BaseSource {
   ): Promise<
     FeatureCollection<Geometry | GeometryCollection, Record<string, any>>
   > {
-    const { code, full } = options;
+    const { code, full } = options as any;
     const data = this.fetchData(code, full);
     return data;
   }
@@ -49,7 +49,7 @@ export class DataVSource extends BaseSource {
   ): Promise<
     FeatureCollection<Geometry | GeometryCollection, Record<string, any>>
   > {
-    const { parentName, full } = ChildrenDataOptions;
+    const { parentName, full } = ChildrenDataOptions as any;
     const data = this.fetchData(parentName, full);
     return data;
   }

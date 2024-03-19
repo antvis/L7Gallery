@@ -57,7 +57,6 @@ const App: React.FC = () => {
             menu={{
               items: dropDownItems,
               onClick: ({ key }) => {
-                console.log(selectTab, districtData);
                 downloadData(
                   selectTab,
                   districtData[selectTab],

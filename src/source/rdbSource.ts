@@ -94,6 +94,8 @@ export class RDBSource extends BaseSource {
         const code = feature.properties[key];
         return code === parentAdcode;
       });
+    } else {
+      resultFeatures = rawData.features;
     }
     //TODO 根据 parentName, parenerLevel 进行数据过滤
 

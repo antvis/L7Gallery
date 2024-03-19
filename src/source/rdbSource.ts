@@ -20,7 +20,7 @@ const DataConfig = {
     text: '锐多宝的地理空间',
     href: 'https://github.com/ruiduobao/shengshixian.com',
   },
-  url: 'https://npm.elemecdn.com/xingzhengqu',
+  url: 'https://jsd.onmicrosoft.cn/npm/xingzhengqu',
   // url: 'https://unpkg.com/xingzhengqu',
 };
 
